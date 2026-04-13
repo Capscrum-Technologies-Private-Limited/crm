@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  TEAM
+  CLIENT
+}
+
+enum ProjectStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum PipelineStage {
+  LEAD
+  CONTACTED
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String
+  role          UserRole  @default(CLIENT)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  client        Client?   @relation("UserToClient")
+  sentMessages  Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+}
+
+model Client {
+  id            String    @id @default(cuid())
+  companyName   String
+  contactPerson String
+  email         String    @unique
+  phone         String?
+  status        String    @default("Pipeline") // Pipeline or Onboarded
+  revenue       Float     @default(0)
+  
+  userId        String?   @unique
+  user          User?     @relation("UserToClient", fields: [userId], references: [id])
+  
+  projects      Project[]
+  pipelines     Pipeline[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Project {
+  id            String        @id @default(cuid())
+  name          String
+  description   String?
+  status        ProjectStatus @default(PENDING)
+  startDate     DateTime      @default(now())
+  endDate       DateTime?
+  
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Pipeline {
+  id            String        @id @default(cuid())
+  stage         PipelineStage @default(LEAD)
+  value         Float         @default(0)
+  
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Message {
+  id            String    @id @default(cuid())
+  content       String
+  
+  senderId      String
+  sender        User      @relation("SentMessages", fields: [senderId], references: [id])
+  
+  receiverId    String
+  receiver      User      @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  
+  createdAt     DateTime  @default(now())
+}
