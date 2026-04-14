@@ -101,13 +101,13 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary" aria-label="Call">
               <Phone size={18} />
             </Button>
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary" aria-label="Video call">
               <Video size={18} />
             </Button>
-            <Button variant="ghost" size="icon" className="text-muted-foreground">
+            <Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="More chat options">
               <MoreVertical size={18} />
             </Button>
           </div>
@@ -149,7 +149,7 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
             onChange={(e) => setInput(e.target.value)}
             className="bg-muted/50 border-input text-foreground h-11 px-5 rounded-full ring-0 focus-visible:ring-1 focus-visible:ring-primary/20"
           />
-          <Button type="submit" size="icon" className="bg-primary hover:bg-primary/90 text-primary-foreground h-11 w-11 rounded-full shadow-lg shadow-primary/20 transition-transform active:scale-95">
+          <Button type="submit" size="icon" className="bg-primary hover:bg-primary/90 text-primary-foreground h-11 w-11 rounded-full shadow-lg shadow-primary/20 transition-transform active:scale-95" aria-label="Send message">
             <Send className="h-5 w-5" />
           </Button>
         </form>

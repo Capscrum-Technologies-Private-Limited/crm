@@ -81,6 +81,7 @@ const Sidebar = ({ role }: SidebarProps) => {
         <button
           onClick={() => signOut({ callbackUrl: "/auth/login" })}
           className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+          aria-label="Logout from account"
         >
           <LogOut size={20} />
           <span className="font-medium">Logout</span>

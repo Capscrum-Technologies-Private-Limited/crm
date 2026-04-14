@@ -28,7 +28,7 @@ export default function DashboardChat() {
         <CardHeader className="border-b border-border py-4 bg-muted/30">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-bold">Messages</CardTitle>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="New chat">
                <UserPlus size={16} className="text-muted-foreground" />
             </Button>
           </div>
@@ -54,8 +54,16 @@ export default function DashboardChat() {
             clients.map((client) => (
               <div
                 key={client.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => setSelectedClient(client)}
-                className={`flex items-center gap-3 p-4 cursor-pointer transition-all border-l-2 ${
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setSelectedClient(client);
+                  }
+                }}
+                className={`flex items-center gap-3 p-4 cursor-pointer transition-all border-l-2 focus-visible:outline-none focus-visible:bg-primary/5 ${
                   selectedClient?.id === client.id 
                   ? "bg-primary/5 border-primary" 
                   : "border-transparent hover:bg-muted/50"

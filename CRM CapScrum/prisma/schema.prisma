@@ -68,6 +68,9 @@ model Project {
   name          String
   description   String?
   status        ProjectStatus @default(PENDING)
+  progress      Int           @default(0)
+  goal          Int           @default(100)
+  stretchGoal   Int           @default(120)
   startDate     DateTime      @default(now())
   endDate       DateTime?
   

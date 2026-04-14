@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(searchParams.get("error") || "");
+  const [error, setError] = useState(searchParams?.get("error") || "");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,7 +33,12 @@ export default function LoginPage() {
       if (res?.error) {
         setError("Invalid email or password");
       } else {
-        router.push("/dashboard");
+        const session = await getSession();
+        if (session?.user?.role === "CLIENT") {
+          router.push("/portal");
+        } else {
+          router.push("/dashboard");
+        }
         router.refresh();
       }
     } catch (err) {
@@ -46,13 +51,13 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-muted/30 px-4">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent)] pointer-events-none" />
-      
+
       <Card className="w-full max-w-md bg-card border-border shadow-xl relative z-10 overflow-hidden">
         <div className="h-1.5 w-full bg-primary" />
         <CardHeader className="space-y-1 flex flex-col items-center pt-8">
-          <img 
-            src="/logo-square.jpg" 
-            alt="CapScrum CRM" 
+          <img
+            src="/logo-square.jpg"
+            alt="CapScrum CRM"
             className="w-24 h-24 object-contain mb-4 rounded-xl shadow-lg shadow-primary/5"
           />
           <CardTitle className="text-2xl font-bold tracking-tight text-foreground">CapScrum CRM</CardTitle>
@@ -89,6 +94,7 @@ export default function LoginPage() {
                 <Input
                   id="password"
                   type="password"
+                  placeholder="********"
                   className="pl-10 bg-background border-input text-foreground"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

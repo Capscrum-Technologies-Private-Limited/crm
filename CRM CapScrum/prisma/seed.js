@@ -15,7 +15,7 @@ async function main() {
   
   const admin = await prisma.user.upsert({
     where: { email: "admin@capscrum.com" },
-    update: {},
+    update: { password: hashedPassword },
     create: {
       email: "admin@capscrum.com",
       name: "Super Admin",
@@ -30,7 +30,7 @@ async function main() {
   const clientUserPassword = await bcrypt.hash("client123", 10);
   const clientUser = await prisma.user.upsert({
     where: { email: "client@example.com" },
-    update: {},
+    update: { password: clientUserPassword },
     create: {
       email: "client@example.com",
       name: "John Doe",

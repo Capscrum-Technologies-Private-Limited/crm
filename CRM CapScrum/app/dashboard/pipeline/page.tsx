@@ -3,23 +3,81 @@
 import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, TrendingUp, Filter } from "lucide-react";
+import { DollarSign, TrendingUp, Filter, Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger,
+  DialogFooter
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const STAGES = ["LEAD", "CONTACTED", "PROPOSAL_SENT", "WON", "LOST"];
 
 export default function PipelinePage() {
   const [pipelines, setPipelines] = useState<any[]>([]);
+  const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
+  // Form State
+  const [formData, setFormData] = useState({
+    clientId: "",
+    stage: "LEAD",
+    value: ""
+  });
+
+  const fetchPipelines = () => {
+    setLoading(true);
     fetch("/api/pipeline")
       .then((res) => res.json())
       .then((data) => {
         setPipelines(data);
         setLoading(false);
       });
+  };
+
+  const fetchClients = () => {
+    fetch("/api/clients")
+      .then((res) => res.json())
+      .then((data) => setClients(data));
+  };
+
+  useEffect(() => {
+    fetchPipelines();
+    fetchClients();
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    
+    try {
+      const res = await fetch("/api/pipeline", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+      
+      if (res.ok) {
+        setOpen(false);
+        setFormData({
+          clientId: "",
+          stage: "LEAD",
+          value: ""
+        });
+        fetchPipelines();
+      }
+    } catch (error) {
+      console.error("Error creating deal:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const getStageColor = (stage: string) => {
     switch (stage) {
@@ -41,9 +99,76 @@ export default function PipelinePage() {
           <Button variant="outline" className="bg-card border-border">
             <Filter className="mr-2 h-4 w-4" /> Filter
           </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            New Deal
-          </Button>
+          
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                <Plus className="mr-2 h-4 w-4" /> New Deal
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px] bg-card border-border">
+              <DialogHeader>
+                <DialogTitle className="text-foreground">Add New Deal</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4 pt-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="clientId" className="text-foreground">Select Client</Label>
+                  <select 
+                    id="clientId" 
+                    value={formData.clientId}
+                    onChange={(e) => setFormData({...formData, clientId: e.target.value})}
+                    required
+                    className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/20"
+                  >
+                    <option value="">Select a client...</option>
+                    {clients.map((client) => (
+                      <option key={client.id} value={client.id}>
+                        {client.companyName} ({client.contactPerson})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="stage" className="text-foreground">Pipeline Stage</Label>
+                  <select 
+                    id="stage" 
+                    value={formData.stage}
+                    onChange={(e) => setFormData({...formData, stage: e.target.value})}
+                    required
+                    className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/20"
+                  >
+                    {STAGES.map((stage) => (
+                      <option key={stage} value={stage}>
+                        {stage.replace('_', ' ')}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="value" className="text-foreground">Deal Value (₹)</Label>
+                  <Input 
+                    id="value" 
+                    type="number"
+                    value={formData.value}
+                    onChange={(e) => setFormData({...formData, value: e.target.value})}
+                    required
+                    placeholder="e.g. 150000"
+                    className="bg-background border-input"
+                  />
+                </div>
+                <DialogFooter className="pt-4">
+                  <Button type="submit" disabled={submitting || !formData.clientId} className="w-full">
+                    {submitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Adding...
+                      </>
+                    ) : "Add Deal"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -79,9 +204,9 @@ export default function PipelinePage() {
                       </div>
                       <div className="flex items-center gap-2 pt-2 border-t border-border/50">
                         <div className="flex -space-x-2">
-                           {[1, 2].map(i => (
+                           {[1].map(i => (
                              <div key={i} className="w-6 h-6 rounded-full border-2 border-card bg-muted flex items-center justify-center text-[10px] text-muted-foreground">
-                               JD
+                               {deal.client.contactPerson.substring(0, 2).toUpperCase()}
                              </div>
                            ))}
                         </div>
