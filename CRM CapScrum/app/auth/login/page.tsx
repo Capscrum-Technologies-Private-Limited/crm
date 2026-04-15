@@ -3,12 +3,9 @@
 import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { motion } from "framer-motion";
 import { Loader2, Mail, Lock } from "lucide-react";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -49,77 +46,119 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-muted/30 px-4">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent)] pointer-events-none" />
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 relative overflow-hidden">
+      {/* Premium Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[80px]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-indigo-500/5 rounded-full blur-[80px]" />
+      </div>
 
-      <Card className="w-full max-w-md bg-card border-border shadow-xl relative z-10 overflow-hidden">
-        <div className="h-1.5 w-full bg-primary" />
-        <CardHeader className="space-y-1 flex flex-col items-center pt-8">
-          <img
-            src="/logo-square.jpg"
-            alt="CapScrum CRM"
-            className="w-24 h-24 object-contain mb-4 rounded-xl shadow-lg shadow-primary/5"
-          />
-          <CardTitle className="text-2xl font-bold tracking-tight text-foreground">CapScrum CRM</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Enter your credentials to access your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <Alert variant="destructive" className="bg-destructive/10 border-destructive/20 text-destructive py-2">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  className="pl-10 bg-background border-input text-foreground placeholder:text-muted-foreground"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="********"
-                  className="pl-10 bg-background border-input text-foreground"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-            <Button className="w-full bg-primary hover:bg-primary/90 py-6 text-primary-foreground font-semibold" disabled={loading}>
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4 py-8">
-          <div className="text-sm text-center text-muted-foreground">
-            Don't have an account? <span className="text-primary font-medium hover:underline cursor-pointer">Contact your Admin</span>
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="w-full max-w-lg relative z-10"
+      >
+        <div className="glass-card rounded-[3.5rem] shadow-2xl overflow-hidden p-12 md:p-16 flex flex-col relative group">
+          <div className="absolute top-0 left-0 w-full h-2 premium-gradient opacity-60" />
+          
+          <div className="flex flex-col items-center mb-12">
+            <motion.div 
+              initial={{ opacity: 0, rotate: -20 }}
+              animate={{ opacity: 1, rotate: 0 }}
+              transition={{ delay: 0.3, type: "spring" }}
+              className="relative mb-8"
+            >
+              <div className="absolute inset-0 bg-primary/10 blur-[30px] rounded-full" />
+              <Image
+                src="/logo-square.jpg"
+                alt="CapScrum CRM"
+                width={128}
+                height={128}
+                priority
+                className="w-32 h-32 object-contain rounded-3xl shadow-2xl relative z-10 border border-slate-200"
+              />
+            </motion.div>
+            <p className="text-[10px] font-black text-muted-foreground/50 uppercase tracking-[0.4em]">Next-Generation Enterprise CRM</p>
           </div>
-        </CardFooter>
-      </Card>
+
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                className="bg-red-50 border border-red-200 text-red-600 text-[11px] font-black uppercase tracking-widest px-6 py-4 rounded-2xl flex items-center justify-center text-center leading-relaxed"
+              >
+                {error}
+              </motion.div>
+            )}
+
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.3em] ml-1">Access Identity</label>
+                <div className="relative group/input">
+                  <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5 text-muted-foreground/30 group-focus-within/input:text-primary transition-colors" />
+                  </div>
+                  <input
+                    type="email"
+                    placeholder="Enter strategic ID"
+                    className="w-full h-16 pl-16 pr-8 bg-slate-50 border border-slate-200 rounded-2xl text-foreground outline-none focus:border-primary/40 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground/30 font-medium"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.3em] ml-1">Security Cipher</label>
+                <div className="relative group/input">
+                  <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-muted-foreground/30 group-focus-within/input:text-primary transition-colors" />
+                  </div>
+                  <input
+                    type="password"
+                    placeholder="Enter cipher"
+                    className="w-full h-16 pl-16 pr-8 bg-slate-50 border border-slate-200 rounded-2xl text-foreground outline-none focus:border-primary/40 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground/30 font-medium"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              className="w-full h-18 rounded-3xl premium-gradient text-white font-black text-[13px] uppercase tracking-[0.3em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed group/btn overflow-hidden"
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-4">
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span>Authorizing...</span>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-3">
+                  <span>Sign In</span>
+                  <div className="opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all">→</div>
+                </div>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-12 pt-10 border-t border-slate-200 flex flex-col items-center gap-6">
+            <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">Authorized Personnel Only</p>
+            <div className="text-[11px] font-black text-muted-foreground/50 uppercase tracking-[0.15em]">
+              New Agent? <span className="text-primary hover:text-primary/80 transition-colors cursor-pointer">Contact Command</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Decorative corner accent */}
+        <div className="absolute -bottom-8 -right-8 w-24 h-24 premium-gradient blur-[60px] opacity-10" />
+      </motion.div>
     </div>
   );
 }

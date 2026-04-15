@@ -39,9 +39,10 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   // Relations
-  client        Client?   @relation("UserToClient")
-  sentMessages  Message[] @relation("SentMessages")
-  receivedMessages Message[] @relation("ReceivedMessages")
+  client            Client?   @relation("UserToClient")
+  sentMessages      Message[] @relation("SentMessages")
+  receivedMessages  Message[] @relation("ReceivedMessages")
+  notifications     Notification[]
 }
 
 model Client {
@@ -58,6 +59,7 @@ model Client {
   
   projects      Project[]
   pipelines     Pipeline[]
+  invoices      Invoice[]
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -76,6 +78,9 @@ model Project {
   
   clientId      String
   client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  milestones    Milestone[]
+  invoices      Invoice[]
   
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -105,3 +110,68 @@ model Message {
   
   createdAt     DateTime  @default(now())
 }
+
+enum MilestoneType {
+  MILESTONE
+  GOAL
+  DEADLINE
+  MEETING
+}
+
+model Milestone {
+  id            String        @id @default(cuid())
+  title         String
+  description   String?
+  date          DateTime
+  type          MilestoneType @default(MILESTONE)
+  color         String        @default("#3b82f6")
+  completed     Boolean       @default(false)
+  
+  projectId     String?
+  project       Project?      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  createdById   String
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+enum InvoiceStatus {
+  DRAFT
+  PENDING
+  PAID
+  OVERDUE
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  invoiceNumber String        @unique
+  amount        Float         @default(0)
+  description   String
+  status        InvoiceStatus @default(PENDING)
+  dueDate       DateTime
+  paidAt        DateTime?
+
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  projectId     String?
+  project       Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Notification {
+  id            String    @id @default(cuid())
+  title         String
+  message       String
+  isRead        Boolean   @default(false)
+  link          String?
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime  @default(now())
+}
+

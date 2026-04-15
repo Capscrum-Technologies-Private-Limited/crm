@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import ChatComponent from "@/components/chat/chat-component";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Loader2 } from "lucide-react";
 
 export default function PortalChat() {
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
@@ -19,30 +19,39 @@ export default function PortalChat() {
   }, []);
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto h-[calc(100vh-160px)] flex flex-col">
-       <div className="flex flex-col space-y-2">
-        <h2 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
-          <MessageSquare className="text-primary" size={32} />
-          Support Chat
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="space-y-10 max-w-5xl mx-auto h-[calc(100vh-140px)] flex flex-col pb-10"
+    >
+       <div className="flex flex-col space-y-4 px-2">
+        <h2 className="text-5xl font-black tracking-tight text-foreground flex items-center gap-6">
+          <div className="p-4 rounded-[1.5rem] bg-slate-50 border border-slate-200 shadow-xl text-primary">
+            <MessageSquare size={36} />
+          </div>
+          Support <span className="text-primary">Ops</span>
         </h2>
-        <p className="text-muted-foreground font-medium">Message our team for any project-related queries. We usually reply within a few hours.</p>
+        <p className="text-lg text-muted-foreground/60 font-medium max-w-2xl leading-relaxed">
+          Establish a secure connection with your strategic lead. Standard response latency is within 120 minutes.
+        </p>
       </div>
 
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 min-h-0 glass-card rounded-[3rem] overflow-hidden shadow-2xl relative">
         {selectedMember ? (
           <ChatComponent 
             receiverId={selectedMember.id} 
-            receiverName={"Team Support"} 
+            receiverName={"Global Support"} 
           />
         ) : (
-          <Card className="h-full bg-card border-border border-dashed flex items-center justify-center">
-              <div className="flex flex-col items-center gap-4 text-muted-foreground">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                <p className="font-semibold uppercase tracking-widest text-xs">Connecting to support team...</p>
-              </div>
-          </Card>
+          <div className="h-full flex items-center justify-center relative overflow-hidden">
+             <div className="absolute inset-0 bg-gradient-to-br from-primary/3 to-transparent opacity-20" />
+             <div className="flex flex-col items-center gap-6 relative z-10 opacity-40">
+                <Loader2 className="animate-spin text-primary" size={40} />
+                <p className="font-black uppercase tracking-[0.3em] text-[10px] text-foreground">Initializing Uplink...</p>
+             </div>
+          </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

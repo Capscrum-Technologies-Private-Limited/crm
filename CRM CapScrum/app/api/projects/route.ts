@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -14,17 +14,37 @@ export async function GET() {
     ? { client: { userId: session.user.id } }
     : {};
 
-  const projects = await prisma.project.findMany({
-    where,
-    include: {
-      client: true,
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-  });
+  const { searchParams } = new URL(req.url);
+  const isAll = searchParams.get("all") === "true";
 
-  return NextResponse.json(projects);
+  if (isAll) {
+    const projects = await prisma.project.findMany({
+      where,
+      include: { client: true },
+      orderBy: { updatedAt: "desc" },
+    });
+    return NextResponse.json(projects);
+  }
+
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = 2; // Test limit for UI verification
+  const skip = (page - 1) * limit;
+
+  const [projects, total] = await Promise.all([
+    prisma.project.findMany({
+      where,
+      include: { client: true },
+      orderBy: { updatedAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.project.count({ where })
+  ]);
+
+  return NextResponse.json({
+    data: projects,
+    totalPages: Math.ceil(total / limit)
+  });
 }
 
 export async function POST(req: Request) {

@@ -23,26 +23,26 @@ export function RevenueChart() {
       <BarChart data={data}>
         <XAxis
           dataKey="name"
-          stroke="#888888"
+          stroke="#94a3b8"
           fontSize={12}
           tickLine={false}
           axisLine={false}
         />
         <YAxis
-          stroke="#888888"
+          stroke="#94a3b8"
           fontSize={12}
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `₹${value}`}
         />
         <Tooltip 
-          contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px" }}
+          contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", boxShadow: "0 4px 24px -4px rgba(0,0,0,0.08)" }}
           itemStyle={{ color: "#2563eb" }}
         />
         <Bar
           dataKey="total"
           fill="currentColor"
-          radius={[4, 4, 0, 0]}
+          radius={[6, 6, 0, 0]}
           className="fill-blue-500"
         />
       </BarChart>

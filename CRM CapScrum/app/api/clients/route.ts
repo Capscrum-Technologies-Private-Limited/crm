@@ -4,27 +4,45 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session || (session.user.role !== "ADMIN" && session.user.role !== "TEAM")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const clients = await prisma.client.findMany({
-    include: {
-      user: {
-        select: {
-          name: true,
-          email: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const { searchParams } = new URL(req.url);
+  const isAll = searchParams.get("all") === "true";
+  
+  if (isAll) {
+    const clients = await prisma.client.findMany({
+      include: { user: { select: { name: true, email: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+    return NextResponse.json(clients);
+  }
 
-  return NextResponse.json(clients);
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = 2; // Test limit for UI verification
+  const skip = (page - 1) * limit;
+
+  const [clients, total] = await Promise.all([
+    prisma.client.findMany({
+      include: {
+        user: {
+          select: { name: true, email: true }
+        }
+      },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.client.count()
+  ]);
+
+  return NextResponse.json({
+    data: clients,
+    totalPages: Math.ceil(total / limit)
+  });
 }
 
 export async function POST(req: Request) {

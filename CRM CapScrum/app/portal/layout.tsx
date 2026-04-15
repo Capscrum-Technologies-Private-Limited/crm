@@ -2,6 +2,7 @@ import Sidebar from "@/components/sidebar";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import PortalWrapper from "./portal-wrapper";
 
 export default async function PortalLayout({
   children,
@@ -18,14 +19,5 @@ export default async function PortalLayout({
     redirect("/dashboard");
   }
 
-  return (
-    <div className="flex min-h-screen">
-      <Sidebar role="CLIENT" />
-      <main className="flex-1 ml-64 p-8 bg-background">
-        <div className="max-w-7xl mx-auto">
-          {children}
-        </div>
-      </main>
-    </div>
-  );
+    return <PortalWrapper>{children}</PortalWrapper>;
 }

@@ -1,7 +1,7 @@
-import Sidebar from "@/components/sidebar";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import DashboardWrapper from "./dashboard-wrapper";
 
 export default async function DashboardLayout({
   children,
@@ -14,14 +14,5 @@ export default async function DashboardLayout({
     redirect("/auth/login");
   }
 
-  return (
-    <div className="flex min-h-screen">
-      <Sidebar role={session.user.role as any} />
-      <main className="flex-1 ml-64 p-8 bg-background">
-        <div className="max-w-7xl mx-auto">
-          {children}
-        </div>
-      </main>
-    </div>
-  );
+  return <DashboardWrapper role={session.user.role}>{children}</DashboardWrapper>;
 }

@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Briefcase, Calendar, Clock, ExternalLink, Activity, ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { Briefcase, Calendar, Clock, ExternalLink, Activity, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function PortalProjectsPage() {
@@ -29,100 +28,119 @@ export default function PortalProjectsPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto pb-10">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-12 max-w-6xl mx-auto pb-20"
+    >
       <div className="flex flex-col space-y-4">
-        <Link href="/portal" className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors">
-          <ArrowLeft size={16} />
-          Back to Dashboard
+        <Link href="/portal" className="inline-flex items-center gap-2 text-[10px] font-black text-muted-foreground/40 hover:text-primary transition-all uppercase tracking-[0.2em] group">
+          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+          Intelligence Matrix
         </Link>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h2 className="text-3xl font-black tracking-tight text-foreground uppercase tracking-widest">Project Portfolio</h2>
-            <p className="text-muted-foreground font-medium mt-1">Detailed view of all your active and archive projects.</p>
+            <h2 className="text-5xl font-black tracking-tight text-foreground leading-tight uppercase tracking-tighter">
+              Operational <span className="text-primary">Portfolio</span>
+            </h2>
+            <p className="text-lg text-muted-foreground/60 font-medium mt-2">Comprehensive lifecycle analysis for all enterprise deployments.</p>
           </div>
-          <Badge variant="secondary" className="bg-muted text-muted-foreground py-1 px-3">
-            {projects.length} Total Projects
-          </Badge>
+          <div className="px-6 py-2 rounded-full glass-card text-[10px] font-black text-primary uppercase tracking-[0.2em] shadow-xl">
+            {projects.length} Secure Pulses
+          </div>
         </div>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-8">
         {loading ? (
-          <div className="text-center py-20 text-muted-foreground">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            Loading your projects...
+          <div className="text-center py-32 flex flex-col items-center gap-6">
+            <Loader2 className="h-12 w-12 animate-spin text-primary opacity-30" />
+            <span className="text-[10px] font-black text-foreground opacity-20 uppercase tracking-[0.3em]">Querying Global Repository...</span>
           </div>
         ) : projects.length === 0 ? (
-          <Card className="bg-muted/20 border-border border-dashed py-20">
-            <CardContent className="flex flex-col items-center justify-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground opacity-30">
-                <Briefcase size={32} />
-              </div>
-              <p className="font-bold text-lg text-foreground">No projects found</p>
-              <p className="text-sm text-muted-foreground">Contact your account manager to get started.</p>
-            </CardContent>
-          </Card>
+          <div className="glass-card rounded-[3rem] border-dashed py-32 flex flex-col items-center justify-center space-y-8">
+            <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 flex items-center justify-center text-muted-foreground/10">
+              <Briefcase size={44} />
+            </div>
+            <div className="text-center">
+              <p className="font-black text-3xl text-foreground tracking-tighter mb-2">Portfolio Uninitialized</p>
+              <p className="text-sm text-muted-foreground/40 font-bold uppercase tracking-widest max-w-sm mx-auto leading-relaxed">Contact your strategic operations lead to initialize your first initiative.</p>
+            </div>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {projects.map((project) => (
-              <Card key={project.id} className="bg-card border-border hover:shadow-xl transition-all group overflow-hidden flex flex-col">
-                <div className="h-1.5 w-full bg-primary opacity-20 group-hover:opacity-100 transition-opacity" />
-                <CardHeader className="pb-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <Badge variant="outline" className={getStatusColor(project.status) + " px-2 py-0 border-none font-black text-[10px] uppercase"}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {projects.map((project, index) => (
+              <motion.div 
+                key={project.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="glass-card rounded-[3rem] hover:border-primary/20 transition-all group overflow-hidden flex flex-col shadow-2xl relative"
+              >
+                <div className="h-2 w-full premium-gradient opacity-20 group-hover:opacity-100 transition-opacity" />
+                <div className="p-10 space-y-10 flex-1 flex flex-col">
+                  <div className="flex justify-between items-start">
+                    <span className={cn(
+                      "px-5 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                      project.status === "COMPLETED" 
+                      ? "bg-emerald-50 text-emerald-600 border-emerald-200" 
+                      : "bg-blue-50 text-blue-600 border-blue-200"
+                    )}>
                       {project.status.replace('_', ' ')}
-                    </Badge>
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                       <ExternalLink size={14} />
+                    </span>
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-muted-foreground/20 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all cursor-pointer shadow-xl">
+                       <ExternalLink size={18} />
                     </div>
                   </div>
-                  <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+
+                  <h3 className="text-3xl font-black text-foreground group-hover:text-primary transition-colors tracking-tighter leading-[1.1]">
                     {project.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6 flex-1 flex flex-col">
-                  {/* Progress Bar */}
-                  <div className="space-y-3">
-                    <div className="flex justify-between text-[10px] font-black text-muted-foreground uppercase tracking-wider">
-                      <span>Completion</span>
+                  </h3>
+
+                  <div className="space-y-4">
+                    <div className="flex justify-between text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">
+                      <span>Phase Performance</span>
                       <span className="text-primary">{project.progress || 0}%</span>
                     </div>
-                    <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-primary transition-all duration-1000 ease-in-out" 
-                        style={{ width: `${project.progress || 0}%` }}
+                    <div className="w-full h-3 bg-slate-100 rounded-full p-[3px] border border-slate-200 overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${project.progress || 0}%` }}
+                        transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
+                        className="h-full premium-gradient rounded-full shadow-[0_0_12px_rgba(59,130,246,0.3)]" 
                       />
                     </div>
                   </div>
 
-                  <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed flex-1">
-                    {project.description || "No description provided."}
+                  <p className="text-sm text-muted-foreground/60 leading-relaxed flex-1 font-medium">
+                    {project.description || "Strategic narrative pending for this operational pulse."}
                   </p>
                   
-                  <div className="pt-6 border-t border-border/50 grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <p className="text-[9px] uppercase font-black text-muted-foreground tracking-widest">Start Date</p>
-                      <div className="flex items-center gap-1.5 text-xs text-foreground font-bold">
-                        <Calendar size={13} className="text-primary" />
+                  <div className="pt-8 border-t border-slate-200 grid grid-cols-2 gap-8 relative">
+                    <div className="absolute top-0 right-1/2 h-full w-[1px] bg-gradient-to-b from-slate-200 to-transparent" />
+                    <div className="space-y-1.5 px-2">
+                      <p className="text-[9px] uppercase font-black text-muted-foreground/20 tracking-[0.3em]">Deployment</p>
+                      <div className="flex items-center gap-2 text-xs text-foreground/80 font-black">
+                        <Calendar size={14} className="text-primary opacity-60" />
                         <span>{new Date(project.startDate).toLocaleDateString()}</span>
                       </div>
                     </div>
-                    <div className="space-y-1 text-right">
-                      <p className="text-[9px] uppercase font-black text-muted-foreground tracking-widest">Target Date</p>
-                      <div className="flex items-center gap-1.5 text-xs text-foreground font-bold justify-end">
-                        <span className={project.endDate ? "text-foreground" : "text-muted-foreground"}>
+                    <div className="space-y-1.5 px-2 text-right">
+                      <p className="text-[9px] uppercase font-black text-muted-foreground/20 tracking-[0.3em]">Target Apex</p>
+                      <div className="flex items-center gap-2 text-xs text-foreground/80 font-black justify-end">
+                        <span className={project.endDate ? "text-foreground" : "text-muted-foreground/40 font-bold"}>
                           {project.endDate ? new Date(project.endDate).toLocaleDateString() : "TBD"}
                         </span>
-                        <Clock size={13} className="text-blue-500" />
+                        <Clock size={14} className="text-primary opacity-60" />
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </motion.div>
             ))}
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

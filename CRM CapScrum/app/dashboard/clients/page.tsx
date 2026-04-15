@@ -1,18 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Search, MoreHorizontal, Loader2 } from "lucide-react";
+  Plus, 
+  Search, 
+  MoreHorizontal, 
+  Loader2 
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { 
   Dialog, 
@@ -40,19 +36,27 @@ export default function ClientsPage() {
     shouldOnboard: false
   });
 
-  const fetchClients = () => {
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchClients = async () => {
     setLoading(true);
-    fetch("/api/clients")
-      .then((res) => res.json())
-      .then((data) => {
-        setClients(data);
-        setLoading(false);
-      });
+    try {
+      const res = await fetch(`/api/clients?page=${page}`);
+      const payload = await res.json();
+      setClients(Array.isArray(payload.data) ? payload.data : []);
+      setTotalPages(payload.totalPages || 1);
+    } catch (error) {
+      console.error("Error fetching clients:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchClients();
-  }, []);
+  }, [page]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,165 +88,219 @@ export default function ClientsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-10"
+    >
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground">Clients</h2>
-          <p className="text-muted-foreground">Manage your business relationships and pipeline.</p>
+          <h2 className="text-4xl font-extrabold tracking-tight text-foreground mb-2">
+            Client <span className="text-primary">Management</span>
+          </h2>
+          <p className="text-muted-foreground text-lg font-medium">Manage your elite business relationships and high-value pipeline.</p>
         </div>
         
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Plus className="mr-2 h-4 w-4" /> Add Client
-            </Button>
+            <button className="px-8 py-4 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
+              <Plus size={20} />
+              <span>Register New Client</span>
+            </button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] bg-card border-border">
-            <DialogHeader>
-              <DialogTitle className="text-foreground">Add New Client</DialogTitle>
+          <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-[2.5rem] p-8 shadow-2xl">
+            <DialogHeader className="mb-6">
+              <DialogTitle className="text-2xl font-black text-foreground">New Client <span className="text-primary">Registry</span></DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-              <div className="grid gap-2">
-                <Label htmlFor="companyName" className="text-foreground">Company Name</Label>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="companyName" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Company Identity</Label>
                 <Input 
                   id="companyName" 
                   value={formData.companyName}
                   onChange={(e) => setFormData({...formData, companyName: e.target.value})}
                   required 
-                  placeholder="e.g. Acme Corp"
-                  className="bg-background border-input"
+                  placeholder="e.g. Acme Corporation"
+                  className="h-14 bg-slate-50 border-slate-200 rounded-2xl text-foreground focus:border-primary/50 transition-all"
                 />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="contactPerson" className="text-foreground">Contact Person</Label>
-                <Input 
-                  id="contactPerson" 
-                  value={formData.contactPerson}
-                  onChange={(e) => setFormData({...formData, contactPerson: e.target.value})}
-                  required 
-                  placeholder="e.g. John Doe"
-                  className="bg-background border-input"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="contactPerson" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Point of Contact</Label>
+                  <Input 
+                    id="contactPerson" 
+                    value={formData.contactPerson}
+                    onChange={(e) => setFormData({...formData, contactPerson: e.target.value})}
+                    required 
+                    placeholder="Full Name"
+                    className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Direct Line</Label>
+                  <Input 
+                    id="phone" 
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    placeholder="+91 ..."
+                    className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground"
+                  />
+                </div>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email" className="text-foreground">Email</Label>
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Professional Email</Label>
                 <Input 
                   id="email" 
                   type="email" 
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   required 
-                  placeholder="client@example.com"
-                  className="bg-background border-input"
+                  placeholder="client@acme.com"
+                  className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground"
                 />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="revenue" className="text-foreground">Initial Revenue (₹)</Label>
-                <Input 
-                  id="revenue" 
-                  type="number" 
-                  value={formData.revenue}
-                  onChange={(e) => setFormData({...formData, revenue: e.target.value})}
-                  placeholder="50000"
-                  className="bg-background border-input"
-                />
+              <div className="space-y-2">
+                <Label htmlFor="revenue" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Project Valuation (₹)</Label>
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">₹</div>
+                  <Input 
+                    id="revenue" 
+                    type="number" 
+                    value={formData.revenue}
+                    onChange={(e) => setFormData({...formData, revenue: e.target.value})}
+                    placeholder="5,00,000"
+                    className="h-12 pl-10 bg-slate-50 border-slate-200 rounded-xl text-foreground"
+                  />
+                </div>
               </div>
-              <div className="flex items-center space-x-2 pt-2">
+              <div className="flex items-center space-x-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
                 <input 
                   type="checkbox" 
                   id="onboard" 
                   checked={formData.shouldOnboard}
                   onChange={(e) => setFormData({...formData, shouldOnboard: e.target.checked})}
-                  className="h-4 w-4 rounded border-input bg-background"
+                  className="h-5 w-5 rounded-lg border-slate-300 bg-white text-primary focus:ring-primary/50"
                 />
-                <Label htmlFor="onboard" className="text-sm font-medium leading-none text-foreground cursor-pointer">
-                  Onboard to Client Portal
+                <Label htmlFor="onboard" className="text-sm font-bold text-foreground cursor-pointer select-none">
+                  Automate Portal Sync & Onboarding
                 </Label>
               </div>
-              <DialogFooter className="pt-4">
-                <Button type="submit" disabled={submitting} className="w-full">
+              <DialogFooter className="pt-6">
+                <button 
+                  type="submit" 
+                  disabled={submitting} 
+                  className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                >
                   {submitting ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating...
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      Initializing...
                     </>
-                  ) : "Create Client"}
-                </Button>
+                  ) : "Finalize Registration"}
+                </button>
               </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card className="bg-card border-border shadow-sm">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg">All Clients</CardTitle>
-            <div className="relative w-80">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search clients..." 
-                className="pl-10 bg-background border-input text-foreground"
-              />
-            </div>
+      <div className="glass-card rounded-[2.5rem] overflow-hidden">
+        <div className="p-8 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <h3 className="text-xl font-bold text-foreground">Active Portfolio</h3>
+          <div className="relative w-full md:w-96">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60" />
+            <Input 
+              placeholder="Search by company or lead..." 
+              className="h-12 pl-12 bg-slate-50 border-slate-200 rounded-2xl text-foreground placeholder:text-muted-foreground/30 focus:border-primary/30 transition-all font-medium"
+            />
           </div>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow className="border-border hover:bg-transparent">
-                <TableHead className="text-muted-foreground font-semibold">Company</TableHead>
-                <TableHead className="text-muted-foreground font-semibold">Contact Person</TableHead>
-                <TableHead className="text-muted-foreground font-semibold">Email</TableHead>
-                <TableHead className="text-muted-foreground font-semibold">Status</TableHead>
-                <TableHead className="text-muted-foreground font-semibold">Revenue</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className="px-8 py-6 text-xs font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Company</th>
+                <th className="px-8 py-6 text-xs font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Key Contact</th>
+                <th className="px-8 py-6 text-xs font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Status</th>
+                <th className="px-8 py-6 text-xs font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Revenue</th>
+                <th className="px-8 py-6 text-xs font-black text-muted-foreground/40 uppercase tracking-[0.2em] text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-20 text-muted-foreground">
-                    <div className="flex flex-col items-center gap-2">
-                       <span className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></span>
-                       Loading clients...
+                <tr>
+                  <td colSpan={5} className="px-8 py-20 text-center">
+                    <div className="flex flex-col items-center gap-4">
+                       <Loader2 className="h-10 w-10 animate-spin text-primary opacity-50" />
+                       <span className="text-sm font-black text-muted-foreground/40 uppercase tracking-widest">Sycing with Server...</span>
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               ) : clients.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-20 text-muted-foreground">
-                    No clients found.
-                  </TableCell>
-                </TableRow>
+                <tr>
+                  <td colSpan={5} className="px-8 py-20 text-center text-muted-foreground/50 font-medium">
+                    Workspace is currently empty. Start by adding your first client.
+                  </td>
+                </tr>
               ) : (
                 clients.map((client) => (
-                  <TableRow key={client.id} className="border-border hover:bg-muted/30 transition-colors">
-                    <TableCell className="font-semibold text-foreground">{client.companyName}</TableCell>
-                    <TableCell className="text-foreground">{client.contactPerson}</TableCell>
-                    <TableCell className="text-muted-foreground">{client.email}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={
+                  <tr key={client.id} className="hover:bg-slate-50 transition-colors group">
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black text-sm">
+                          {client.companyName.substring(0, 1).toUpperCase()}
+                        </div>
+                        <span className="font-bold text-foreground text-base">{client.companyName}</span>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6 text-sm">
+                      <div className="font-bold text-foreground/80">{client.contactPerson}</div>
+                      <div className="text-muted-foreground/40 font-medium mt-0.5">{client.email}</div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className={cn(
+                        "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
                         client.status === "Onboarded" 
-                        ? "bg-emerald-50 text-emerald-700 border-emerald-200" 
-                        : "bg-blue-50 text-blue-700 border-blue-200"
-                      }>
+                        ? "bg-emerald-50 text-emerald-600 border-emerald-200" 
+                        : "bg-blue-50 text-blue-600 border-blue-200"
+                      )}>
                         {client.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="font-medium text-foreground">₹{client.revenue.toLocaleString()}</TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="ghost" size="icon" className="hover:bg-muted" aria-label="More options">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                      </span>
+                    </td>
+                    <td className="px-8 py-6 font-bold text-foreground">₹{client.revenue.toLocaleString()}</td>
+                    <td className="px-8 py-6 text-right">
+                      <button className="p-3 rounded-xl hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
+                        <MoreHorizontal size={20} />
+                      </button>
+                    </td>
+                  </tr>
                 ))
               )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
+            </tbody>
+          </table>
+        </div>
+        {/* Pagination Footer */}
+        <div className="flex items-center justify-between p-6 border-t border-slate-200 bg-slate-50">
+           <span className="text-xs font-bold text-muted-foreground">Page {page} of {totalPages}</span>
+           <div className="flex gap-2">
+              <button 
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold bg-white text-foreground hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                 Prev
+              </button>
+              <button 
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                disabled={page >= totalPages}
+                className="px-4 py-2 rounded-xl border border-primary text-sm font-bold bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                 Next
+              </button>
+           </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
