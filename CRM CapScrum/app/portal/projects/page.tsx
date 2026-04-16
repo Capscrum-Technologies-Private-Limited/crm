@@ -13,8 +13,14 @@ export default function PortalProjectsPage() {
   useEffect(() => {
     fetch("/api/projects")
       .then((res) => res.json())
-      .then((data) => {
+      .then((payload) => {
+        // Handle paginated response structure { data: [], totalPages: n }
+        const data = Array.isArray(payload) ? payload : (payload.data || []);
         setProjects(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch projects:", err);
         setLoading(false);
       });
   }, []);

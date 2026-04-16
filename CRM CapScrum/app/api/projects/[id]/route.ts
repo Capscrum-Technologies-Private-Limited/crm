@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { sendProjectCompletionEmail } from "@/lib/email";
 
 export async function PATCH(
   req: Request,
@@ -26,7 +27,19 @@ export async function PATCH(
         stretchGoal: stretchGoal !== undefined ? parseInt(stretchGoal) : undefined,
         endDate: endDate ? new Date(endDate) : undefined,
       },
+      include: {
+        client: { select: { companyName: true, contactPerson: true, email: true } },
+      },
     });
+
+    if (status === "COMPLETED") {
+      sendProjectCompletionEmail({
+        name: project.name,
+        clientEmail: project.client.email,
+        clientName: project.client.contactPerson,
+        companyName: project.client.companyName,
+      }).catch(console.error);
+    }
 
     return NextResponse.json(project);
   } catch (error) {

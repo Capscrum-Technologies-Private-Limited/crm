@@ -14,8 +14,14 @@ export default function PortalPage() {
   useEffect(() => {
     fetch("/api/projects")
       .then((res) => res.json())
-      .then((data) => {
+      .then((payload) => {
+        // Handle paginated response structure { data: [], totalPages: n }
+        const data = Array.isArray(payload) ? payload : (payload.data || []);
         setProjects(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch projects:", err);
         setLoading(false);
       });
   }, []);
@@ -28,7 +34,9 @@ export default function PortalPage() {
     }
   };
 
-  const activeProject = projects.find(p => p.status !== "COMPLETED") || projects[0];
+  const activeProject = Array.isArray(projects) 
+    ? (projects.find(p => p.status !== "COMPLETED") || projects[0])
+    : null;
 
   return (
     <motion.div 

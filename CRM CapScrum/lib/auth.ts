@@ -17,23 +17,29 @@ export const authOptions: NextAuthOptions = {
         }
 
         const email = credentials.email.trim().toLowerCase();
+        console.log("Auth attempt for:", email);
 
         const user = await prisma.user.findUnique({
           where: { email },
         });
 
         if (!user || !user.password) {
+          console.log("Auth failed: User not found", email);
           throw new Error("No user found");
         }
 
+        console.log("User found, comparing passwords...");
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
           user.password
         );
 
         if (!isPasswordValid) {
+          console.log("Auth failed: Invalid password for", email);
           throw new Error("Invalid password");
         }
+
+        console.log("Auth success for:", email);
 
         return {
           id: user.id,

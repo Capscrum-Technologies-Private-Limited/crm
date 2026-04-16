@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
+import ClientIO from "socket.io-client";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
@@ -23,6 +24,7 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
   const { data: session } = useSession();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [socket, setSocket] = useState<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   
   // Track length for seamless scrolling
@@ -43,12 +45,46 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
   };
 
   useEffect(() => {
-    // Fetch immediately
+    // Fetch initial history
     fetchMessages();
 
-    // High frequency REST polling for Serverless compatibility (Replaces Sockets)
-    const interval = setInterval(fetchMessages, 3000);
-    return () => clearInterval(interval);
+    let socketIo: any;
+    
+    // Connect to Socket.IO
+    fetch("/api/socket").finally(() => {
+      socketIo = ClientIO({
+        path: "/api/socket",
+      });
+      
+      if (session?.user?.id) {
+         socketIo.emit("join", session.user.id);
+      }
+
+      socketIo.on("receive_message", (message: Message) => {
+        if (message.senderId === receiverId || message.receiverId === session?.user?.id) {
+           setMessages((prev) => {
+             // Prevent duplicates
+             if (!prev.find(m => m.id === message.id)) {
+               return [...prev, message];
+             }
+             return prev;
+           });
+           
+           prevMessageCountRef.current += 1;
+           setTimeout(() => {
+             scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+           }, 100);
+        }
+      });
+
+      setSocket(socketIo);
+    });
+
+    return () => {
+       if (socketIo) {
+         socketIo.disconnect();
+       }
+    };
   }, [receiverId, session?.user?.id]);
 
   const sendMessage = async (e: React.FormEvent) => {
@@ -69,6 +105,10 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
       setInput("");
       prevMessageCountRef.current += 1;
       
+      if (socket) {
+        socket.emit("send_message", msg);
+      }
+
       setTimeout(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 100);

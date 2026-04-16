@@ -33,6 +33,7 @@ export default function ClientsPage() {
     email: "",
     phone: "",
     revenue: "",
+    currency: "INR",
     shouldOnboard: false
   });
 
@@ -76,6 +77,7 @@ export default function ClientsPage() {
           email: "",
           phone: "",
           revenue: "",
+          currency: "INR",
           shouldOnboard: false
         });
         fetchClients();
@@ -159,18 +161,49 @@ export default function ClientsPage() {
                   className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="revenue" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Project Valuation (₹)</Label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">₹</div>
-                  <Input 
-                    id="revenue" 
-                    type="number" 
-                    value={formData.revenue}
-                    onChange={(e) => setFormData({...formData, revenue: e.target.value})}
-                    placeholder="5,00,000"
-                    className="h-12 pl-10 bg-slate-50 border-slate-200 rounded-xl text-foreground"
-                  />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Currency Preference</Label>
+                  <div className="flex p-1 bg-slate-100 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({...formData, currency: "INR"})}
+                      className={cn(
+                        "flex-1 h-10 rounded-lg text-xs font-bold transition-all",
+                        formData.currency === "INR" ? "bg-white text-primary shadow-sm" : "text-muted-foreground"
+                      )}
+                    >
+                      INR (₹)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({...formData, currency: "USD"})}
+                      className={cn(
+                        "flex-1 h-10 rounded-lg text-xs font-bold transition-all",
+                        formData.currency === "USD" ? "bg-white text-primary shadow-sm" : "text-muted-foreground"
+                      )}
+                    >
+                      USD ($)
+                    </button>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="revenue" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">
+                    Value ({formData.currency === "INR" ? "₹" : "$"})
+                  </Label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">
+                      {formData.currency === "INR" ? "₹" : "$"}
+                    </div>
+                    <Input 
+                      id="revenue" 
+                      type="number" 
+                      value={formData.revenue}
+                      onChange={(e) => setFormData({...formData, revenue: e.target.value})}
+                      placeholder={formData.currency === "INR" ? "5,00,000" : "5,000"}
+                      className="h-12 pl-10 bg-slate-50 border-slate-200 rounded-xl text-foreground"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="flex items-center space-x-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">

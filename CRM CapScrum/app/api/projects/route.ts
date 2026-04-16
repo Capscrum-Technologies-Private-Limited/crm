@@ -27,7 +27,7 @@ export async function GET(req: Request) {
   }
 
   const page = parseInt(searchParams.get("page") || "1");
-  const limit = 2; // Test limit for UI verification
+  const limit = 10;
   const skip = (page - 1) * limit;
 
   const [projects, total] = await Promise.all([

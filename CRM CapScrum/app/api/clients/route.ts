@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import bcrypt from "bcryptjs";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -22,7 +23,7 @@ export async function GET(req: Request) {
   }
 
   const page = parseInt(searchParams.get("page") || "1");
-  const limit = 2; // Test limit for UI verification
+  const limit = 10;
   const skip = (page - 1) * limit;
 
   const [clients, total] = await Promise.all([
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
 
   try {
     const data = await req.json();
-    const { companyName, contactPerson, email, phone, revenue, status, shouldOnboard } = data;
+    const { companyName, contactPerson, email, phone, revenue, status, shouldOnboard, industry, currency } = data;
 
     let userId: string | undefined;
 
@@ -86,9 +87,20 @@ export async function POST(req: Request) {
         phone,
         revenue: parseFloat(revenue) || 0,
         status: shouldOnboard ? "Onboarded" : (status || "Pipeline"),
+        industry: industry || null,
+        currency: currency || "INR",
         userId,
       },
     });
+
+    // Send welcome email if onboarding
+    if (shouldOnboard) {
+      sendWelcomeEmail({
+        email,
+        contactPerson,
+        companyName,
+      }).catch(console.error);
+    }
 
     return NextResponse.json(client);
   } catch (error) {

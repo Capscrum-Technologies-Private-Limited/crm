@@ -15,7 +15,9 @@ import {
   CalendarDays,
   X,
   Banknote,
-  ChevronRight
+  ChevronRight,
+  Receipt,
+  FileText,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
@@ -36,8 +38,10 @@ const Sidebar = ({ role, isOpen = false, onClose }: SidebarProps) => {
     { label: "Clients", icon: Users, href: "/dashboard/clients" },
     { label: "Projects", icon: Briefcase, href: "/dashboard/projects" },
     { label: "Invoices", icon: Banknote, href: "/dashboard/invoices" },
+    { label: "Expenses", icon: Receipt, href: "/dashboard/expenses" },
     { label: "Pipeline", icon: GitGraph, href: "/dashboard/pipeline" },
     { label: "Calendar", icon: CalendarDays, href: "/dashboard/calendar" },
+    { label: "Templates", icon: FileText, href: "/dashboard/templates" },
     { label: "Team", icon: UsersRound, href: "/dashboard/team" },
     { label: "Chat", icon: MessageSquare, href: "/dashboard/chat" },
   ];

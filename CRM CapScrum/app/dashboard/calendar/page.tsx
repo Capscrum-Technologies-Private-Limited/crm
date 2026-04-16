@@ -91,7 +91,10 @@ export default function CalendarPage() {
   const fetchProjects = () => {
     fetch("/api/projects")
       .then((res) => res.json())
-      .then((data) => setProjects(Array.isArray(data) ? data : []));
+      .then((payload) => {
+        const data = Array.isArray(payload) ? payload : (payload.data || []);
+        setProjects(data);
+      });
   };
 
   useEffect(() => {
