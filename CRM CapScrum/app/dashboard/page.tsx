@@ -11,6 +11,9 @@ import {
   Receipt,
   Loader2,
   Banknote,
+  CheckCircle2,
+  Clock,
+  Target,
 } from "lucide-react";
 import { RevenueChart } from "@/components/charts/revenue-chart";
 import { useEffect, useState } from "react";
@@ -29,6 +32,12 @@ interface Stats {
   totalOverdue: number;
   overdueCount: number;
   totalExpenses: number;
+  amountReceived: number;
+  yetToReceive: number;
+  milestoneReceived: number;
+  milestoneYetToReceive: number;
+  milestonesPaid: number;
+  milestonesPending: number;
   activities: {
     type: string;
     title: string;
@@ -63,18 +72,22 @@ export default function DashboardPage() {
     );
   }
 
-  if (!stats) {
+  if (!stats || "error" in (stats as any)) {
     return (
       <div className="p-8 text-center text-muted-foreground">
-        Failed to load dashboard data.
+        Failed to load dashboard data. {(stats as any)?.error}
       </div>
     );
   }
 
+  const safeToLocaleString = (val: any) => {
+    return (typeof val === "number" ? val : 0).toLocaleString();
+  };
+
   const cards = [
     {
       title: "Total Clients",
-      value: stats.clientCount,
+      value: stats.clientCount || 0,
       icon: Users,
       color: "text-blue-600",
       gradient: "from-blue-500/10 to-transparent",
@@ -82,15 +95,31 @@ export default function DashboardPage() {
     },
     {
       title: "Total Revenue",
-      value: `₹${stats.totalRevenue.toLocaleString()}`,
+      value: `₹${safeToLocaleString(stats.totalRevenue)}`,
       icon: DollarSign,
       color: "text-emerald-600",
       gradient: "from-emerald-500/10 to-transparent",
       link: "/dashboard/invoices",
     },
     {
+      title: "Amount Received",
+      value: `₹${safeToLocaleString(stats.amountReceived)}`,
+      icon: CheckCircle2,
+      color: "text-green-600",
+      gradient: "from-green-500/10 to-transparent",
+      link: "/dashboard/invoices",
+    },
+    {
+      title: "Yet to Receive",
+      value: `₹${safeToLocaleString(stats.yetToReceive)}`,
+      icon: Clock,
+      color: "text-amber-600",
+      gradient: "from-amber-500/10 to-transparent",
+      link: "/dashboard/invoices",
+    },
+    {
       title: "Active Projects",
-      value: stats.activeProjects,
+      value: stats.activeProjects || 0,
       icon: Briefcase,
       color: "text-purple-600",
       gradient: "from-purple-500/10 to-transparent",
@@ -98,7 +127,7 @@ export default function DashboardPage() {
     },
     {
       title: "Pipeline Deals",
-      value: stats.pipelineCount,
+      value: stats.pipelineCount || 0,
       icon: TrendingUp,
       color: "text-orange-600",
       gradient: "from-orange-500/10 to-transparent",
@@ -106,7 +135,7 @@ export default function DashboardPage() {
     },
     {
       title: "Invoices Paid",
-      value: `₹${stats.totalPaid.toLocaleString()}`,
+      value: `₹${safeToLocaleString(stats.totalPaid)}`,
       icon: Receipt,
       color: "text-teal-600",
       gradient: "from-teal-500/10 to-transparent",
@@ -114,7 +143,7 @@ export default function DashboardPage() {
     },
     {
       title: "Total Expenses",
-      value: `₹${stats.totalExpenses.toLocaleString()}`,
+      value: `₹${safeToLocaleString(stats.totalExpenses)}`,
       icon: Banknote,
       color: "text-red-500",
       gradient: "from-red-500/10 to-transparent",
@@ -191,7 +220,7 @@ export default function DashboardPage() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
+        className="grid gap-5 md:grid-cols-2 lg:grid-cols-4"
       >
         {cards.map((card) => (
           <Link key={card.title} href={card.link}>
@@ -227,6 +256,74 @@ export default function DashboardPage() {
           </Link>
         ))}
       </motion.div>
+
+      {/* Payment Milestone Progress */}
+      {(stats.milestonesPaid > 0 || stats.milestonesPending > 0) && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="glass-card rounded-[2.5rem] p-8"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-200">
+                <Target size={22} className="text-indigo-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-foreground">Payment Milestones</h3>
+                <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest mt-0.5">
+                  {stats.milestonesPaid + stats.milestonesPending} Total Milestones
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-black text-foreground">
+                {stats.milestonesPaid + stats.milestonesPending > 0
+                  ? Math.round((stats.milestonesPaid / (stats.milestonesPaid + stats.milestonesPending)) * 100)
+                  : 0}%
+              </p>
+              <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Collected</p>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="relative h-4 bg-slate-100 rounded-full overflow-hidden mb-6">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{
+                width: `${
+                  stats.milestonesPaid + stats.milestonesPending > 0
+                    ? (stats.amountReceived / (stats.amountReceived + stats.yetToReceive)) * 100
+                    : 0
+                }%`,
+              }}
+              transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-emerald-500 via-green-500 to-teal-400"
+            />
+          </div>
+
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+              <p className="text-[10px] font-black text-emerald-600/60 uppercase tracking-[0.15em] mb-1">Received</p>
+              <p className="text-lg font-black text-emerald-700">₹{safeToLocaleString(stats.amountReceived)}</p>
+            </div>
+            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+              <p className="text-[10px] font-black text-amber-600/60 uppercase tracking-[0.15em] mb-1">Yet to Receive</p>
+              <p className="text-lg font-black text-amber-700">₹{safeToLocaleString(stats.yetToReceive)}</p>
+            </div>
+            <div className="p-4 rounded-2xl bg-green-50 border border-green-200">
+              <p className="text-[10px] font-black text-green-600/60 uppercase tracking-[0.15em] mb-1">Milestones Paid</p>
+              <p className="text-lg font-black text-green-700">{stats.milestonesPaid}</p>
+            </div>
+            <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200">
+              <p className="text-[10px] font-black text-orange-600/60 uppercase tracking-[0.15em] mb-1">Milestones Pending</p>
+              <p className="text-lg font-black text-orange-700">{stats.milestonesPending}</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Main Content Grid */}
       <div className="grid gap-8 lg:grid-cols-7">
@@ -321,7 +418,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
               <span className="text-sm font-bold text-foreground">
-                ₹{stats.totalPending.toLocaleString()} pending
+                ₹{safeToLocaleString(stats.totalPending)} pending
               </span>
             </div>
           )}

@@ -108,3 +108,57 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to create client" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user.role !== "ADMIN" && session.user.role !== "TEAM")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+
+  try {
+    await prisma.client.delete({
+      where: { id }
+    });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+  }
+}
+
+export async function PUT(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user.role !== "ADMIN" && session.user.role !== "TEAM")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const data = await req.json();
+    const { id, companyName, contactPerson, email, phone, revenue, status, industry, currency } = data;
+
+    if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+
+    const client = await prisma.client.update({
+      where: { id },
+      data: {
+        companyName,
+        contactPerson,
+        email,
+        phone,
+        revenue: parseFloat(revenue) || 0,
+        status,
+        industry,
+        currency,
+      },
+    });
+
+    return NextResponse.json(client);
+  } catch (error) {
+    console.error("Error updating client:", error);
+    return NextResponse.json({ error: "Failed to update client" }, { status: 500 });
+  }
+}

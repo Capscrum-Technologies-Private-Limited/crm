@@ -225,7 +225,7 @@ export default function ExpensesPage() {
           <TrendingDown size={22} className="text-red-500 mb-3" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Total Expenses</p>
           <p className="text-2xl font-black text-foreground mt-1">
-            ₹{grandTotal.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+            ₹{(grandTotal || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
           </p>
         </div>
         {byCategory.slice(0, 3).map((cat, i) => {
@@ -235,7 +235,7 @@ export default function ExpensesPage() {
               <Tag size={22} className="text-primary/50 mb-3" />
               <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">{cfg.label}</p>
               <p className="text-2xl font-black text-foreground mt-1">
-                ₹{cat.total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                ₹{(cat.total || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
               </p>
               <p className="text-[10px] text-muted-foreground/40 font-medium mt-1">{cat.count} entries</p>
             </div>
@@ -318,7 +318,7 @@ export default function ExpensesPage() {
                         {new Date(exp.date).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 font-black text-red-600 whitespace-nowrap">
-                        ₹{exp.amount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                        ₹{(exp.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                       </td>
                       <td className="px-6 py-4">
                         <button

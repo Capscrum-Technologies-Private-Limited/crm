@@ -332,7 +332,7 @@ export default function InvoicesPage() {
                         className="px-3 py-3 text-sm text-foreground text-right outline-none bg-transparent font-medium border-l border-slate-100"
                       />
                       <div className="px-3 py-3 text-sm font-bold text-foreground text-right border-l border-slate-100">
-                        ₹{item.amount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                        ₹{(item.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                       </div>
                       <button
                         type="button"
@@ -352,7 +352,7 @@ export default function InvoicesPage() {
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground font-medium">Subtotal</span>
                     <span className="font-bold text-foreground">
-                      ₹{subtotal.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      ₹{(subtotal || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm gap-2">
@@ -370,7 +370,7 @@ export default function InvoicesPage() {
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground font-medium">Tax Amount</span>
                       <span className="font-medium text-foreground">
-                        +₹{taxAmount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                        +₹{(taxAmount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                   )}
@@ -388,7 +388,7 @@ export default function InvoicesPage() {
                   <div className="pt-2 border-t border-slate-300 flex justify-between">
                     <span className="text-base font-black text-foreground">Total</span>
                     <span className="text-base font-black text-primary">
-                      ₹{grandTotal.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      ₹{(grandTotal || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
@@ -454,7 +454,7 @@ export default function InvoicesPage() {
             Total Outstanding
           </p>
           <p className="text-3xl font-black mt-1 relative z-10">
-            ₹{totalOutstanding.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+            ₹{(totalOutstanding || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
         </div>
         <div className="glass-card rounded-[2rem] p-6 text-foreground relative overflow-hidden group">
@@ -464,7 +464,7 @@ export default function InvoicesPage() {
             Total Paid
           </p>
           <p className="text-3xl font-black mt-1 relative z-10">
-            ₹{totalPaid.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+            ₹{(totalPaid || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
         </div>
         <div className="glass-card rounded-[2rem] p-6 text-foreground relative overflow-hidden group bg-slate-50 border-slate-200">
@@ -541,7 +541,7 @@ export default function InvoicesPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 font-black text-foreground whitespace-nowrap">
-                      ₹{(inv.total || inv.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      ₹{(inv.total || inv.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(inv.status)}</td>
                     <td className="px-6 py-4 whitespace-nowrap">

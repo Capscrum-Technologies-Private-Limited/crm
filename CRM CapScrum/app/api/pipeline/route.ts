@@ -44,3 +44,50 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to create pipeline item" }, { status: 500 });
   }
 }
+
+export async function PUT(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user.role !== "ADMIN" && session.user.role !== "TEAM")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const data = await req.json();
+    const { id, stage, value, clientId } = data;
+
+    if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+
+    const pipeline = await prisma.pipeline.update({
+      where: { id },
+      data: {
+        ...(stage && { stage }),
+        ...(value !== undefined && { value: parseFloat(value) || 0 }),
+        ...(clientId && { clientId }),
+      },
+    });
+
+    return NextResponse.json(pipeline);
+  } catch (error) {
+    console.error("Pipeline update error:", error);
+    return NextResponse.json({ error: "Failed to update pipeline" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user.role !== "ADMIN" && session.user.role !== "TEAM")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+
+  try {
+    await prisma.pipeline.delete({ where: { id } });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+  }
+}

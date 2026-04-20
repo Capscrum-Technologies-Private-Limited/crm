@@ -23,6 +23,10 @@ export async function GET() {
       recentClients,
       recentInvoices,
       recentProjects,
+      milestonePaidTotal,
+      milestoneUnpaidTotal,
+      milestonePaidCount,
+      milestoneUnpaidCount,
     ] = await Promise.all([
       prisma.client.count(),
       prisma.project.count(),
@@ -34,7 +38,7 @@ export async function GET() {
       prisma.invoice.groupBy({
         by: ["status"],
         _sum: { total: true, amount: true },
-        _count: true,
+        _count: { _all: true },
       }),
       prisma.expense.aggregate({ _sum: { amount: true } }),
       prisma.client.findMany({
@@ -52,16 +56,31 @@ export async function GET() {
         take: 5,
         select: { id: true, name: true, status: true, progress: true, updatedAt: true, client: { select: { companyName: true } } },
       }),
+      // Milestone BillingStage aggregations
+      prisma.billingStage.aggregate({ where: { isPaid: true }, _sum: { price: true } }),
+      prisma.billingStage.aggregate({ where: { isPaid: false }, _sum: { price: true } }),
+      prisma.billingStage.count({ where: { isPaid: true } }),
+      prisma.billingStage.count({ where: { isPaid: false } }),
     ]);
 
     // Calculate invoice totals
     const paidInvoices = invoiceStats.find(s => s.status === "PAID");
     const pendingInvoices = invoiceStats.find(s => s.status === "PENDING");
     const overdueInvoices = invoiceStats.find(s => s.status === "OVERDUE");
+    const sentInvoices = invoiceStats.find(s => s.status === "SENT");
 
     const totalPaid = (paidInvoices?._sum?.total || 0) + (paidInvoices?._sum?.amount || 0);
     const totalPending = (pendingInvoices?._sum?.total || 0) + (pendingInvoices?._sum?.amount || 0);
     const totalOverdue = (overdueInvoices?._sum?.total || 0) + (overdueInvoices?._sum?.amount || 0);
+    const totalSent = (sentInvoices?._sum?.total || 0) + (sentInvoices?._sum?.amount || 0);
+
+    // Milestone payment tracking
+    const milestoneReceived = milestonePaidTotal._sum.price || 0;
+    const milestoneYetToReceive = milestoneUnpaidTotal._sum.price || 0;
+
+    // Combined payment metrics (Invoice + Milestone based)
+    const amountReceived = totalPaid + milestoneReceived;
+    const yetToReceive = totalPending + totalOverdue + totalSent + milestoneYetToReceive;
 
     // Build activity feed from real data
     const activities: { type: string; title: string; description: string; time: string; link?: string }[] = [];
@@ -80,7 +99,7 @@ export async function GET() {
       activities.push({
         type: "invoice",
         title: `Invoice ${inv.status === "PAID" ? "Paid" : "Issued"}`,
-        description: `${inv.invoiceNumber} — ₹${(inv.total || inv.amount).toLocaleString()} for ${inv.client.companyName}`,
+        description: `${inv.invoiceNumber} — ₹${(inv.total || inv.amount || 0).toLocaleString()} for ${inv.client.companyName}`,
         time: inv.createdAt.toISOString(),
         link: "/dashboard/invoices",
       });
@@ -110,8 +129,15 @@ export async function GET() {
       totalPaid,
       totalPending,
       totalOverdue,
-      overdueCount: overdueInvoices?._count || 0,
+      overdueCount: overdueInvoices?._count?._all || 0,
       totalExpenses: expenseTotal._sum.amount || 0,
+      // Milestone payment tracking
+      amountReceived,
+      yetToReceive,
+      milestoneReceived,
+      milestoneYetToReceive,
+      milestonesPaid: milestonePaidCount,
+      milestonesPending: milestoneUnpaidCount,
       activities: activities.slice(0, 10),
     });
   } catch (error) {

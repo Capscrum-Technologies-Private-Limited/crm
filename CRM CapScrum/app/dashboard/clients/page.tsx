@@ -19,6 +19,14 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function ClientsPage() {
   const [clients, setClients] = useState<any[]>([]);
@@ -34,8 +42,12 @@ export default function ClientsPage() {
     phone: "",
     revenue: "",
     currency: "INR",
-    shouldOnboard: false
+    shouldOnboard: false,
+    status: ""
   });
+  
+  const [editId, setEditId] = useState<string | null>(null);
+  const [isViewMode, setIsViewMode] = useState(false);
 
   // Pagination State
   const [page, setPage] = useState(1);
@@ -61,12 +73,18 @@ export default function ClientsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isViewMode) {
+      setOpen(false);
+      return;
+    }
+    
     setSubmitting(true);
     
     try {
+      const payload = { ...formData, id: editId };
       const res = await fetch("/api/clients", {
-        method: "POST",
-        body: JSON.stringify(formData),
+        method: editId ? "PUT" : "POST",
+        body: JSON.stringify(payload),
       });
       
       if (res.ok) {
@@ -78,14 +96,60 @@ export default function ClientsPage() {
           phone: "",
           revenue: "",
           currency: "INR",
-          shouldOnboard: false
+          shouldOnboard: false,
+          status: ""
         });
+        setEditId(null);
         fetchClients();
       }
     } catch (error) {
-      console.error("Error creating client:", error);
+      console.error("Error saving client:", error);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleEdit = (client: any) => {
+    setIsViewMode(false);
+    setEditId(client.id);
+    setFormData({
+      companyName: client.companyName || "",
+      contactPerson: client.contactPerson || "",
+      email: client.email || "",
+      phone: client.phone || "",
+      revenue: client.revenue ? client.revenue.toString() : "",
+      currency: client.currency || "INR",
+      shouldOnboard: client.status === "Onboarded",
+      status: client.status || ""
+    });
+    setOpen(true);
+  };
+
+  const handleView = (client: any) => {
+    setIsViewMode(true);
+    setEditId(client.id);
+    setFormData({
+      companyName: client.companyName || "",
+      contactPerson: client.contactPerson || "",
+      email: client.email || "",
+      phone: client.phone || "",
+      revenue: client.revenue ? client.revenue.toString() : "",
+      currency: client.currency || "INR",
+      shouldOnboard: client.status === "Onboarded",
+      status: client.status || ""
+    });
+    setOpen(true);
+  };
+
+  const deleteClient = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this client?")) return;
+    try {
+      const res = await fetch(`/api/clients?id=${id}`, {
+        method: "DELETE"
+      });
+      if (res.ok) fetchClients();
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -103,7 +167,17 @@ export default function ClientsPage() {
           <p className="text-muted-foreground text-lg font-medium">Manage your elite business relationships and high-value pipeline.</p>
         </div>
         
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={(val) => {
+          setOpen(val);
+          if(!val) {
+            setEditId(null);
+            setIsViewMode(false);
+            setFormData({
+              companyName: "", contactPerson: "", email: "", phone: "",
+              revenue: "", currency: "INR", shouldOnboard: false, status: ""
+            });
+          }
+        }}>
           <DialogTrigger asChild>
             <button className="px-8 py-4 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
               <Plus size={20} />
@@ -112,13 +186,16 @@ export default function ClientsPage() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-[2.5rem] p-8 shadow-2xl">
             <DialogHeader className="mb-6">
-              <DialogTitle className="text-2xl font-black text-foreground">New Client <span className="text-primary">Registry</span></DialogTitle>
+              <DialogTitle className="text-2xl font-black text-foreground">
+                {isViewMode ? "Client Details" : editId ? "Edit Client" : "New Client Registry"}
+              </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="companyName" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Company Identity</Label>
                 <Input 
                   id="companyName" 
+                  disabled={isViewMode}
                   value={formData.companyName}
                   onChange={(e) => setFormData({...formData, companyName: e.target.value})}
                   required 
@@ -131,6 +208,7 @@ export default function ClientsPage() {
                   <Label htmlFor="contactPerson" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Point of Contact</Label>
                   <Input 
                     id="contactPerson" 
+                    disabled={isViewMode}
                     value={formData.contactPerson}
                     onChange={(e) => setFormData({...formData, contactPerson: e.target.value})}
                     required 
@@ -142,6 +220,7 @@ export default function ClientsPage() {
                   <Label htmlFor="phone" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Direct Line</Label>
                   <Input 
                     id="phone" 
+                    disabled={isViewMode}
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     placeholder="+91 ..."
@@ -153,6 +232,7 @@ export default function ClientsPage() {
                 <Label htmlFor="email" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Professional Email</Label>
                 <Input 
                   id="email" 
+                  disabled={isViewMode}
                   type="email" 
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -167,6 +247,7 @@ export default function ClientsPage() {
                   <div className="flex p-1 bg-slate-100 rounded-xl">
                     <button
                       type="button"
+                      disabled={isViewMode}
                       onClick={() => setFormData({...formData, currency: "INR"})}
                       className={cn(
                         "flex-1 h-10 rounded-lg text-xs font-bold transition-all",
@@ -177,6 +258,7 @@ export default function ClientsPage() {
                     </button>
                     <button
                       type="button"
+                      disabled={isViewMode}
                       onClick={() => setFormData({...formData, currency: "USD"})}
                       className={cn(
                         "flex-1 h-10 rounded-lg text-xs font-bold transition-all",
@@ -197,6 +279,7 @@ export default function ClientsPage() {
                     </div>
                     <Input 
                       id="revenue" 
+                      disabled={isViewMode}
                       type="number" 
                       value={formData.revenue}
                       onChange={(e) => setFormData({...formData, revenue: e.target.value})}
@@ -210,28 +293,31 @@ export default function ClientsPage() {
                 <input 
                   type="checkbox" 
                   id="onboard" 
+                  disabled={isViewMode}
                   checked={formData.shouldOnboard}
                   onChange={(e) => setFormData({...formData, shouldOnboard: e.target.checked})}
-                  className="h-5 w-5 rounded-lg border-slate-300 bg-white text-primary focus:ring-primary/50"
+                  className="h-5 w-5 rounded-lg border-slate-300 bg-white text-primary focus:ring-primary/50 disabled:opacity-50"
                 />
                 <Label htmlFor="onboard" className="text-sm font-bold text-foreground cursor-pointer select-none">
                   Automate Portal Sync & Onboarding
                 </Label>
               </div>
-              <DialogFooter className="pt-6">
-                <button 
-                  type="submit" 
-                  disabled={submitting} 
-                  className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      Initializing...
-                    </>
-                  ) : "Finalize Registration"}
-                </button>
-              </DialogFooter>
+              {!isViewMode && (
+                <DialogFooter className="pt-6">
+                  <button 
+                    type="submit" 
+                    disabled={submitting} 
+                    className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        Saving...
+                      </>
+                    ) : editId ? "Save Changes" : "Finalize Registration"}
+                  </button>
+                </DialogFooter>
+              )}
             </form>
           </DialogContent>
         </Dialog>
@@ -301,11 +387,28 @@ export default function ClientsPage() {
                         {client.status}
                       </span>
                     </td>
-                    <td className="px-8 py-6 font-bold text-foreground">₹{client.revenue.toLocaleString()}</td>
+                    <td className="px-8 py-6 font-bold text-foreground">₹{(client.revenue || 0).toLocaleString()}</td>
                     <td className="px-8 py-6 text-right">
-                      <button className="p-3 rounded-xl hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
-                        <MoreHorizontal size={20} />
-                      </button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="p-3 rounded-xl hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
+                            <MoreHorizontal size={20} />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-[160px] rounded-2xl p-2">
+                          <DropdownMenuLabel className="text-xs font-black text-muted-foreground/50 uppercase tracking-[0.2em] mb-1">Actions</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="cursor-pointer font-bold text-sm rounded-xl mb-1 focus:bg-slate-50 transition-colors" onClick={() => handleView(client)}>
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer font-bold text-sm rounded-xl mb-1 focus:bg-slate-50 transition-colors" onClick={() => handleEdit(client)}>
+                            Edit Client
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-red-500 hover:!text-red-600 focus:!text-red-600 hover:!bg-red-50 focus:!bg-red-50 cursor-pointer font-bold text-sm rounded-xl transition-colors" onClick={() => deleteClient(client.id)}>
+                            Delete Client
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
                 ))
