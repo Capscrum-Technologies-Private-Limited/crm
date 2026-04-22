@@ -18,7 +18,9 @@ import {
   Building2,
   Calendar,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Briefcase,
+  LucideIcon
 } from "lucide-react";
 import { 
   Dialog, 
@@ -38,29 +40,70 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MilestoneProgress } from "@/components/pipeline/milestone-progress";
+import { MilestoneProgress, type Milestone } from "@/components/pipeline/milestone-progress";
+import { MilestoneList } from "@/components/pipeline/milestone-list";
 
-const STAGES = ["LEAD", "CONTACTED", "PROPOSAL_SENT", "WON", "LOST"];
+const STAGES = [
+  "LEAD_IDENTIFICATION", 
+  "ONBOARDING_PROPOSAL", 
+  "REQUIREMENTS_DISCOVERY", 
+  "DOCUMENTATION", 
+  "PAYMENT_STRUCTURING", 
+  "UI_DESIGN", 
+  "ARCHITECTURE", 
+  "PROJECT_EXECUTION", 
+  "FINAL_PAYMENT", 
+  "DEPLOYMENT",
+  "LOST",
+  "WON"
+];
 
 const STAGE_LABELS: Record<string, string> = {
-  LEAD: "Lead Acquisition",
-  CONTACTED: "Initial Contact",
-  PROPOSAL_SENT: "Proposal Negotiation",
-  WON: "Deal Won",
-  LOST: "Deal Lost",
+  LEAD_IDENTIFICATION: "Lead Generation",
+  ONBOARDING_PROPOSAL: "Proposals",
+  REQUIREMENTS_DISCOVERY: "Discovery Calls",
+  DOCUMENTATION: "Requirements",
+  PAYMENT_STRUCTURING: "Financial Setup",
+  UI_DESIGN: "UI Design",
+  ARCHITECTURE: "Architecture",
+  PROJECT_EXECUTION: "Execution",
+  FINAL_PAYMENT: "Final Settlement",
+  DEPLOYMENT: "Deployment",
+  LOST: "Lost / Abandoned",
+  WON: "Deal Secured",
 };
 
-const STAGE_METRICS: Record<string, { color: string, icon: any }> = {
-  LEAD: { color: "text-blue-500", icon: Layers },
-  CONTACTED: { color: "text-violet-500", icon: Calendar },
-  PROPOSAL_SENT: { color: "text-amber-500", icon: TrendingUp },
-  WON: { color: "text-emerald-500", icon: CheckCircle2 },
-  LOST: { color: "text-red-500", icon: AlertCircle },
+const STAGE_METRICS: Record<string, { color: string, icon: LucideIcon }> = {
+  LEAD_IDENTIFICATION: { color: "text-blue-500", icon: Layers },
+  ONBOARDING_PROPOSAL: { color: "text-indigo-500", icon: Plus },
+  REQUIREMENTS_DISCOVERY: { color: "text-violet-500", icon: Calendar },
+  DOCUMENTATION: { color: "text-sky-500", icon: Briefcase },
+  PAYMENT_STRUCTURING: { color: "text-amber-500", icon: DollarSign },
+  UI_DESIGN: { color: "text-pink-500", icon: Layers },
+  ARCHITECTURE: { color: "text-cyan-500", icon: Building2 },
+  PROJECT_EXECUTION: { color: "text-orange-500", icon: TrendingUp },
+  FINAL_PAYMENT: { color: "text-emerald-500", icon: CheckCircle2 },
+  DEPLOYMENT: { color: "text-green-500", icon: ArrowRight },
+  LOST: { color: "text-rose-500", icon: X },
+  WON: { color: "text-emerald-400", icon: CheckCircle2 },
 };
+
+interface Client {
+  id: string;
+  companyName: string;
+}
+
+interface Pipeline {
+  id: string;
+  clientId: string;
+  stage: string;
+  value: number;
+  client?: Client;
+}
 
 export default function PipelinePage() {
-  const [pipelines, setPipelines] = useState<any[]>([]);
-  const [clients, setClients] = useState<any[]>([]);
+  const [pipelines, setPipelines] = useState<Pipeline[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -73,7 +116,7 @@ export default function PipelinePage() {
   // Form State
   const [formData, setFormData] = useState({
     clientId: "",
-    stage: "LEAD",
+    stage: "LEAD_IDENTIFICATION",
     value: ""
   });
 
@@ -124,11 +167,11 @@ export default function PipelinePage() {
   };
 
   const resetForm = () => {
-    setFormData({ clientId: "", stage: "LEAD", value: "" });
+    setFormData({ clientId: "", stage: "LEAD_IDENTIFICATION", value: "" });
     setEditId(null);
   };
 
-  const handleEdit = (deal: any) => {
+  const handleEdit = (deal: Pipeline) => {
     setEditId(deal.id);
     setFormData({
       clientId: deal.clientId,
@@ -169,12 +212,16 @@ export default function PipelinePage() {
 
   // Summary stats
   const totalValue = pipelines.reduce((sum, p) => sum + (p.value || 0), 0);
-  const activeValue = pipelines.filter(p => !["WON", "LOST"].includes(p.stage)).reduce((sum, p) => sum + (p.value || 0), 0);
-  const wonValue = pipelines.filter(p => p.stage === "WON").reduce((sum, p) => sum + (p.value || 0), 0);
+  const activeValue = pipelines.filter(p => !["FINAL_PAYMENT", "DEPLOYMENT"].includes(p.stage)).reduce((sum, p) => sum + (p.value || 0), 0);
+  const wonValue = pipelines.filter(p => p.stage === "DEPLOYMENT").reduce((sum, p) => sum + (p.value || 0), 0);
 
   const filteredPipelines = filterStage === "ALL" 
     ? pipelines 
     : pipelines.filter(p => p.stage === filterStage);
+
+  const conversionRate = pipelines.length > 0 
+    ? ((pipelines.filter(p => p.stage === "DEPLOYMENT").length / pipelines.length) * 100).toFixed(1)
+    : "0.0";
 
   return (
     <motion.div 
@@ -182,12 +229,12 @@ export default function PipelinePage() {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-8 pb-20"
     >
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div>
           <h2 className="text-4xl font-extrabold tracking-tight text-foreground mb-2">
             Deal <span className="text-primary">Roadmap</span>
           </h2>
-          <p className="text-muted-foreground text-lg font-medium">Strategic milestone tracking for high-stakes capital ventures.</p>
+          <p className="text-muted-foreground text-sm md:text-lg font-medium opacity-80">Strategic milestone tracking for high-stakes capital ventures.</p>
         </div>
         <div className="flex gap-3">
           <DropdownMenu>
@@ -286,8 +333,8 @@ export default function PipelinePage() {
       </div>
 
       {/* Analytics Dashboard */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-card rounded-[2.5rem] p-8 border-slate-100/10 relative overflow-hidden group">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="glass-card rounded-[2.5rem] p-6 border-slate-100/10 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-primary/10 transition-colors" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Total Pipeline</p>
           <div className="flex items-baseline gap-2">
@@ -295,15 +342,15 @@ export default function PipelinePage() {
             <span className="text-xs font-bold text-muted-foreground/60">Gross Valuation</span>
           </div>
         </div>
-        <div className="glass-card rounded-[2.5rem] p-8 border-slate-100/10 relative overflow-hidden group">
+        <div className="glass-card rounded-[2.5rem] p-6 border-slate-100/10 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-amber-500/10 transition-colors" />
-          <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Active Capital</p>
+          <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Conversion Rate</p>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-black text-foreground">₹{(activeValue / 1000).toFixed(0)}K</span>
-            <span className="text-xs font-bold text-amber-600">In Progression</span>
+            <span className="text-3xl font-black text-amber-600">{conversionRate}%</span>
+            <span className="text-xs font-bold text-amber-600/60 font-medium">Capture Ratio</span>
           </div>
         </div>
-        <div className="glass-card rounded-[2.5rem] p-8 border-slate-100/10 relative overflow-hidden group">
+        <div className="glass-card rounded-[2.5rem] p-6 border-slate-100/10 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-emerald-500/10 transition-colors" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Secured Revenue</p>
           <div className="flex items-baseline gap-2">
@@ -314,9 +361,9 @@ export default function PipelinePage() {
       </div>
 
       {/* Milestone Track List */}
-      <div className="space-y-6">
+      <div className="min-h-[600px] bg-slate-50/20 rounded-[3rem] p-4 border border-slate-100/50">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
+          <div className="flex flex-col items-center justify-center py-40 gap-4 opacity-50">
             <Loader2 className="animate-spin text-primary" size={40} />
             <span className="text-xs font-black uppercase tracking-[0.4em] ml-2">Syncing Deal Cloud...</span>
           </div>
@@ -332,133 +379,14 @@ export default function PipelinePage() {
              </button>
           </div>
         ) : (
-          <AnimatePresence mode="popLayout">
-            {filteredPipelines.map((deal, idx) => {
-              const currentIdx = getStageIndex(deal.stage);
-              const isWon = deal.stage === "WON";
-              const isLost = deal.stage === "LOST";
-              const isProcessing = processingId === deal.id;
-
-              // Display stages for tracker (terminal stages are WON/LOST)
-              const milestoneData = [
-                { id: "lead", label: "Lead", isCompleted: currentIdx > 0, isCurrent: currentIdx === 0 },
-                { id: "contact", label: "Contact", isCompleted: currentIdx > 1, isCurrent: currentIdx === 1 },
-                { id: "proposal", label: "Proposal", isCompleted: currentIdx > 2, isCurrent: currentIdx === 2 },
-                { 
-                  id: "outcome", 
-                  label: isLost ? "Lost" : isWon ? "Won" : "Closing", 
-                  isCompleted: isWon, 
-                  isCurrent: currentIdx >= 3,
-                  isTerminal: isWon ? "WON" : isLost ? "LOST" : null
-                }
-              ];
-
-              return (
-                <motion.div
-                  key={deal.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className={cn(
-                    "glass-card p-1 rounded-[3rem] group transition-all duration-500",
-                    isWon ? "hover:border-emerald-500/30" : isLost ? "hover:border-red-500/30" : "hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5"
-                  )}
-                >
-                  <div className="p-8 md:p-10 flex flex-col lg:flex-row items-center gap-10">
-                    {/* Deal Header Info */}
-                    <div className="flex-shrink-0 w-full lg:w-72 flex items-center gap-6">
-                      <div className={cn(
-                        "w-16 h-16 rounded-[1.5rem] flex items-center justify-center relative overflow-hidden group-hover:scale-110 transition-transform",
-                        isWon ? "bg-emerald-50 text-emerald-600" : isLost ? "bg-red-50 text-red-600" : "bg-slate-100 text-foreground"
-                      )}>
-                        <Building2 size={24} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] mb-1">Entity</p>
-                        <h4 className="text-xl font-black text-foreground truncate group-hover:text-primary transition-colors">
-                          {deal.client?.companyName}
-                        </h4>
-                        <div className="flex items-center gap-2 mt-1">
-                           <DollarSign size={12} className="text-primary" />
-                           <span className="text-sm font-black text-foreground">₹{(deal.value || 0).toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Milestone Tracker */}
-                    <div className="flex-1 w-full px-6 py-4">
-                      <MilestoneProgress 
-                        milestones={milestoneData} 
-                        currentIdx={currentIdx >= 3 ? 3 : currentIdx} 
-                      />
-                    </div>
-
-                    {/* Action Hub */}
-                    <div className="flex-shrink-0 flex items-center gap-4">
-                      {!(isWon || isLost) ? (
-                        <div className="flex gap-2">
-                          <button 
-                            disabled={isProcessing}
-                            onClick={() => updateStage(deal.id, STAGES[currentIdx + 1])}
-                            className="h-14 px-8 rounded-2xl bg-primary text-white font-black text-sm shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
-                          >
-                            {isProcessing ? <Loader2 className="animate-spin" size={18} /> : (
-                              <>
-                                <span>Advance to {STAGES[currentIdx + 1].replace('_',' ')}</span>
-                                <ArrowRight size={18} />
-                              </>
-                            )}
-                          </button>
-                          
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <button className="h-14 w-14 rounded-2xl bg-slate-50 border border-slate-100 text-foreground flex items-center justify-center hover:bg-slate-100 transition-all">
-                                <ChevronRight className="rotate-90 md:rotate-0" size={20} />
-                              </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-[180px] rounded-[1.5rem] p-2 shadow-2xl">
-                              <DropdownMenuLabel className="text-[10px] font-black text-muted-foreground/40 uppercase px-3">Quick Actions</DropdownMenuLabel>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem className="p-3 text-emerald-600 font-bold rounded-xl cursor-pointer" onClick={() => updateStage(deal.id, "WON")}>
-                                Mark as Won
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="p-3 text-red-600 font-bold rounded-xl cursor-pointer" onClick={() => updateStage(deal.id, "LOST")}>
-                                Mark as Lost
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem className="p-3 font-bold rounded-xl cursor-pointer" onClick={() => handleEdit(deal)}>
-                                Edit Valuation
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="p-3 text-muted-foreground/60 font-bold rounded-xl cursor-pointer" onClick={() => handleDelete(deal.id)}>
-                                Retract Deal
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-4">
-                           <div className={cn(
-                             "px-6 py-3 rounded-2xl flex items-center gap-3 font-black text-sm uppercase tracking-widest",
-                             isWon ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-red-50 text-red-600 border border-red-100"
-                           )}>
-                             {isWon ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
-                             <span>{isWon ? "Success" : "Concluded"}</span>
-                           </div>
-                           <button 
-                            onClick={() => handleEdit(deal)}
-                            className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-foreground transition-all flex items-center justify-center"
-                           >
-                            <Pencil size={16} />
-                           </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+          <MilestoneList 
+            initialDeals={pipelines}
+            stages={STAGES}
+            stageLabels={STAGE_LABELS}
+            stageMetrics={STAGE_METRICS}
+            onDealMove={updateStage}
+            onEdit={handleEdit}
+          />
         )}
       </div>
     </motion.div>

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Check, Dot, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface Milestone {
+export interface Milestone {
   id: string;
   label: string;
   isCompleted: boolean;

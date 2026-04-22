@@ -34,16 +34,36 @@ const CATEGORIES = [
   { value: "OTHER", label: "Other", color: "bg-slate-100 text-slate-600 border-slate-200" },
 ];
 
+interface Project {
+  id: string;
+  name: string;
+}
+
+interface Expense {
+  id: string;
+  description: string;
+  amount: number;
+  category: string;
+  date: string;
+  project?: Project;
+}
+
+interface CategoryStat {
+  category: string;
+  total: number;
+  count: number;
+}
+
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState<any[]>([]);
-  const [projects, setProjects] = useState<any[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [grandTotal, setGrandTotal] = useState(0);
-  const [byCategory, setByCategory] = useState<any[]>([]);
+  const [byCategory, setByCategory] = useState<CategoryStat[]>([]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

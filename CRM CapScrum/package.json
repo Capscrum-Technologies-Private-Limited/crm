@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
+    "@hono/node-server": "^2.0.0",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "@radix-ui/react-avatar": "^1.1.11",
@@ -25,12 +27,13 @@
     "date-fns": "^4.1.0",
     "dotenv": "^17.4.2",
     "framer-motion": "^12.38.0",
+    "hono": "^4.12.14",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",
     "lucide-react": "^1.8.0",
     "next": "16.2.3",
     "next-auth": "^4.24.13",
-    "nodemailer": "^7.0.13",
+    "nodemailer": "^8.0.5",
     "pg": "^8.20.0",
     "prisma": "^7.7.0",
     "react": "19.2.4",

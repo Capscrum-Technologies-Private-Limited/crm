@@ -65,6 +65,8 @@ export async function POST(request: Request) {
         type: type || "MILESTONE",
         color: color || "#3b82f6",
         projectId: projectId || null,
+        assignedToId: body.assignedToId || null,
+        attachmentUrl: body.attachmentUrl || null,
         createdById: session.user.id,
       },
       include: {
@@ -105,6 +107,8 @@ export async function PATCH(request: Request) {
         ...(updateData.date && { date: new Date(updateData.date) }),
         ...(updateData.type && { type: updateData.type }),
         ...(updateData.color && { color: updateData.color }),
+        ...(updateData.assignedToId !== undefined && { assignedToId: updateData.assignedToId }),
+        ...(updateData.attachmentUrl !== undefined && { attachmentUrl: updateData.attachmentUrl }),
       },
       include: {
         project: {

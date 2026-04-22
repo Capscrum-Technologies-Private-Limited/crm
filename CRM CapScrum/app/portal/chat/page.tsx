@@ -5,9 +5,14 @@ import { motion } from "framer-motion";
 import ChatComponent from "@/components/chat/chat-component";
 import { MessageSquare, Loader2 } from "lucide-react";
 
+interface TeamMember {
+  id: string;
+  name: string;
+}
+
 export default function PortalChat() {
-  const [teamMembers, setTeamMembers] = useState<any[]>([]);
-  const [selectedMember, setSelectedMember] = useState<any>(null);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
   useEffect(() => {
     fetch("/api/users/team")
@@ -15,7 +20,8 @@ export default function PortalChat() {
       .then((data) => {
         setTeamMembers(data);
         if (data.length > 0) setSelectedMember(data[0]);
-      });
+      })
+      .catch((err) => console.error("Error fetching team members:", err));
   }, []);
 
   return (

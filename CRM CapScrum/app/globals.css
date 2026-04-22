@@ -98,3 +98,11 @@
     @apply bg-gradient-to-br from-[#001476] via-[#1b43b6] to-[#42f5a7];
   }
 }
+
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -23,12 +23,12 @@ export default function DashboardWrapper({ children, role }: { children: React.R
         />
       )}
 
-      <main className="flex-1 w-full md:ml-72 flex flex-col min-h-screen transition-all duration-300">
+      <main className="flex-1 w-full md:ml-72 flex flex-col min-h-screen transition-all duration-300 overflow-hidden">
         <TopBar 
           isMobileMenuOpen={isMobileMenuOpen} 
           onMenuClick={() => setIsMobileMenuOpen(true)} 
         />
-        <div className="p-4 md:p-8 flex-1 w-full max-w-[100vw] md:max-w-none">
+        <div className="p-4 md:p-8 flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden">
           {children}
         </div>
       </main>

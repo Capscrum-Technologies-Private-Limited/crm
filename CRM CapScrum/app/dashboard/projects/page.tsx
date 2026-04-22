@@ -15,14 +15,32 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+interface Client {
+  id: string;
+  companyName: string;
+}
+
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  progress: number;
+  goal: number;
+  stretchGoal: number;
+  startDate: string;
+  endDate: string;
+  client: Client;
+}
+
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [clients, setClients] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   
   // Pagination State
   const [page, setPage] = useState(1);
@@ -35,7 +53,9 @@ export default function ProjectsPage() {
     clientId: "",
     status: "IN_PROGRESS",
     startDate: new Date().toISOString().split('T')[0],
-    endDate: ""
+    endDate: "",
+    totalValue: "",
+    advanceAmount: ""
   });
 
   // Update Form State
@@ -87,14 +107,6 @@ export default function ProjectsPage() {
       
       if (res.ok) {
         setOpen(false);
-        setFormData({
-          name: "",
-          description: "",
-          clientId: "",
-          status: "IN_PROGRESS",
-          startDate: new Date().toISOString().split('T')[0],
-          endDate: ""
-        });
         fetchProjects();
       }
     } catch (error) {
@@ -104,11 +116,25 @@ export default function ProjectsPage() {
     }
   };
 
+  const resetFormData = () => {
+    setFormData({
+      name: "",
+      description: "",
+      clientId: "",
+      status: "IN_PROGRESS",
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: "",
+      totalValue: "",
+      advanceAmount: ""
+    });
+  };
+
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     
     try {
+      if (!selectedProject) return;
       const res = await fetch(`/api/projects/${selectedProject.id}`, {
         method: "PATCH",
         body: JSON.stringify(updateData),
@@ -125,7 +151,7 @@ export default function ProjectsPage() {
     }
   };
 
-  const openUpdateDialog = (project: any) => {
+  const openUpdateDialog = (project: Project) => {
     setSelectedProject(project);
     setUpdateData({
       status: project.status,
@@ -209,29 +235,51 @@ export default function ProjectsPage() {
                   ))}
                 </select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="startDate" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Kickoff Date</Label>
-                  <Input 
-                    id="startDate" 
-                    type="date"
-                    value={formData.startDate}
-                    onChange={(e) => setFormData({...formData, startDate: e.target.value})}
-                    required
-                    className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Project Value (₹)</Label>
+                    <Input 
+                      type="number"
+                      value={formData.totalValue}
+                      onChange={(e) => setFormData({...formData, totalValue: e.target.value})}
+                      placeholder="Total Contract Value"
+                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Advance Required (₹)</Label>
+                    <Input 
+                      type="number"
+                      value={formData.advanceAmount}
+                      onChange={(e) => setFormData({...formData, advanceAmount: e.target.value})}
+                      placeholder="Down Payment"
+                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="endDate" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Delivery Deadline</Label>
-                  <Input 
-                    id="endDate" 
-                    type="date"
-                    value={formData.endDate}
-                    onChange={(e) => setFormData({...formData, endDate: e.target.value})}
-                    className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="startDate" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Kickoff Date</Label>
+                    <Input 
+                      id="startDate" 
+                      type="date"
+                      value={formData.startDate}
+                      onChange={(e) => setFormData({...formData, startDate: e.target.value})}
+                      required
+                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="endDate" className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Delivery Deadline</Label>
+                    <Input 
+                      id="endDate" 
+                      type="date"
+                      value={formData.endDate}
+                      onChange={(e) => setFormData({...formData, endDate: e.target.value})}
+                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                    />
+                  </div>
                 </div>
-              </div>
               <DialogFooter className="pt-6">
                 <button 
                   type="submit" 

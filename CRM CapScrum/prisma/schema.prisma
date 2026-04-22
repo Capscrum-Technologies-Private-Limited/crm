@@ -22,11 +22,18 @@ enum ProjectStatus {
 }
 
 enum PipelineStage {
-  LEAD
-  CONTACTED
-  PROPOSAL_SENT
-  WON
+  LEAD_IDENTIFICATION
+  ONBOARDING_PROPOSAL
+  REQUIREMENTS_DISCOVERY
+  DOCUMENTATION
+  PAYMENT_STRUCTURING
+  UI_DESIGN
+  ARCHITECTURE
+  PROJECT_EXECUTION
+  FINAL_PAYMENT
+  DEPLOYMENT
   LOST
+  WON
 }
 
 model User {
@@ -43,6 +50,7 @@ model User {
   sentMessages      Message[] @relation("SentMessages")
   receivedMessages  Message[] @relation("ReceivedMessages")
   notifications     Notification[]
+  assignedMilestones Milestone[] @relation("AssignedTo")
 }
 
 model Client {
@@ -62,6 +70,7 @@ model Client {
   projects      Project[]
   pipelines     Pipeline[]
   invoices      Invoice[]
+  payments      Payment[]
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -78,6 +87,9 @@ model Project {
   startDate     DateTime      @default(now())
   endDate       DateTime?
   
+  totalValue    Float         @default(0)
+  advanceAmount Float         @default(0)
+  
   clientId      String
   client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
   
@@ -85,6 +97,7 @@ model Project {
   invoices      Invoice[]
   billingStages BillingStage[]
   expenses      Expense[]
+  payments      Payment[]
   
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -109,7 +122,7 @@ model BillingStage {
 
 model Pipeline {
   id            String        @id @default(cuid())
-  stage         PipelineStage @default(LEAD)
+  stage         PipelineStage @default(LEAD_IDENTIFICATION)
   value         Float         @default(0)
   
   clientId      String
@@ -128,6 +141,8 @@ model Message {
   
   receiverId    String
   receiver      User      @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  
+  attachmentUrl String?
   
   createdAt     DateTime  @default(now())
 }
@@ -151,7 +166,11 @@ model Milestone {
   projectId     String?
   project       Project?      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   
+  assignedToId  String?
+  assignedTo    User?         @relation("AssignedTo", fields: [assignedToId], references: [id])
+  
   createdById   String
+  attachmentUrl String?
   
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -269,4 +288,28 @@ model Notification {
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt     DateTime  @default(now())
+}
+
+enum PaymentType {
+  ADVANCE
+  MILESTONE
+  FINAL
+  REFUND
+}
+
+model Payment {
+  id            String      @id @default(cuid())
+  amount        Float
+  type          PaymentType @default(ADVANCE)
+  date          DateTime    @default(now())
+  notes         String?
+  
+  projectId     String
+  project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  clientId      String
+  client        Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }

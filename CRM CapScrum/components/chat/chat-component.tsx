@@ -10,13 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send, User as UserIcon, Circle, MoreVertical, Phone, Video } from "lucide-react";
+import { Send, User as UserIcon, Circle, MoreVertical, Phone, Video, Paperclip, FileText, Image as ImageIcon } from "lucide-react";
 
 interface Message {
   id: string;
   content: string;
   senderId: string;
   receiverId: string;
+  attachmentUrl?: string | null;
   createdAt: string;
 }
 
@@ -24,7 +25,7 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
   const { data: session } = useSession();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<ReturnType<typeof ClientIO> | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   
   // Track length for seamless scrolling
@@ -48,22 +49,34 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
     // Fetch initial history
     fetchMessages();
 
-    let socketIo: any;
+    let socketIo: ReturnType<typeof ClientIO> | null = null;
+    let pollInterval: NodeJS.Timeout | null = null;
     
     // Connect to Socket.IO
     fetch("/api/socket").finally(() => {
       socketIo = ClientIO({
         path: "/api/socket",
+        reconnectionAttempts: 5,
+        timeout: 10000,
       });
       
-      if (session?.user?.id) {
-         socketIo.emit("join", session.user.id);
-      }
+      socketIo.on("connect", () => {
+        if (session?.user?.id) {
+          socketIo?.emit("join", session.user.id);
+        }
+      });
 
+      socketIo.on("connect_error", () => {
+        console.warn("Socket connection failed. Falling back to polling.");
+        // Start polling if socket fails
+        if (!pollInterval) {
+          pollInterval = setInterval(fetchMessages, 5000);
+        }
+      });
+      
       socketIo.on("receive_message", (message: Message) => {
         if (message.senderId === receiverId || message.receiverId === session?.user?.id) {
            setMessages((prev) => {
-             // Prevent duplicates
              if (!prev.find(m => m.id === message.id)) {
                return [...prev, message];
              }
@@ -84,12 +97,16 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
        if (socketIo) {
          socketIo.disconnect();
        }
+       if (pollInterval) {
+         clearInterval(pollInterval);
+       }
     };
   }, [receiverId, session?.user?.id]);
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || !session?.user?.id) return;
+  const sendMessage = async (e: React.FormEvent, attachmentUrl?: string) => {
+    if (e) e.preventDefault();
+    if (!input.trim() && !attachmentUrl) return;
+    if (!session?.user?.id) return;
 
     try {
       const res = await fetch("/api/messages", {
@@ -97,6 +114,7 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
         body: JSON.stringify({
           content: input,
           receiverId,
+          attachmentUrl: attachmentUrl || null,
         }),
       });
 
@@ -115,6 +133,15 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
     } catch (error) {
       console.error("Error sending message:", error);
     }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Simulate upload - in production, this would go to S3 or a local upload route
+    const mockUrl = `/uploads/${file.name}`;
+    sendMessage(null as any, mockUrl);
   };
 
   return (
@@ -181,7 +208,26 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
                           : "bg-slate-100 text-foreground/90 rounded-tl-none border-slate-200"
                       )}
                     >
-                      <p className="leading-relaxed">{msg.content}</p>
+                      {msg.content && <p className="leading-relaxed">{msg.content}</p>}
+                      {msg.attachmentUrl && (
+                        <div className={cn(
+                          "mt-2 p-3 rounded-2xl bg-white/10 border border-white/20 flex items-center gap-3 transition-colors hover:bg-white/20 cursor-pointer",
+                          !isMe && "bg-slate-200/50 border-slate-300 text-slate-700"
+                        )}>
+                          <div className={cn(
+                            "w-8 h-8 rounded-lg flex items-center justify-center",
+                            isMe ? "bg-white/20" : "bg-white"
+                          )}>
+                            <FileText size={16} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-black uppercase tracking-tighter truncate">
+                              {msg.attachmentUrl.split('/').pop()}
+                            </p>
+                            <p className="text-[10px] opacity-60 font-medium italic">Shared Resource</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <span className={cn(
                       "text-[9px] font-black uppercase tracking-widest text-muted-foreground/30 px-2",
@@ -207,8 +253,12 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
               placeholder="Inject secure message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="relative w-full h-14 bg-white border border-slate-200 rounded-[2rem] px-8 text-sm text-foreground focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all font-medium placeholder:text-muted-foreground/30"
+              className="relative w-full h-14 bg-white border border-slate-200 rounded-[2rem] px-8 pl-14 text-sm text-foreground focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all font-medium placeholder:text-muted-foreground/30"
             />
+            <label className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center rounded-full hover:bg-slate-50 text-muted-foreground/50 cursor-pointer transition-all">
+              <Paperclip size={20} />
+              <input type="file" className="hidden" onChange={handleFileUpload} />
+            </label>
           </div>
           <button 
             type="submit" 

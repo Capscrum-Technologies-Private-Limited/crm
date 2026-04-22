@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     const pipeline = await prisma.pipeline.create({
       data: {
         clientId,
-        stage: stage || "LEAD",
+        stage: stage || "LEAD_IDENTIFICATION",
         value: parseFloat(value) || 0,
       },
     });
@@ -53,6 +53,7 @@ export async function PUT(req: Request) {
 
   try {
     const data = await req.json();
+    console.log("Pipeline Update Request:", data); // DEBUG
     const { id, stage, value, clientId } = data;
 
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
@@ -66,10 +67,14 @@ export async function PUT(req: Request) {
       },
     });
 
+    console.log("Pipeline Updated Successfully:", pipeline.id); // DEBUG
     return NextResponse.json(pipeline);
-  } catch (error) {
-    console.error("Pipeline update error:", error);
-    return NextResponse.json({ error: "Failed to update pipeline" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Pipeline update failure:", error.message || error);
+    return NextResponse.json({ 
+      error: "Failed to update pipeline",
+      details: error.message 
+    }, { status: 500 });
   }
 }
 

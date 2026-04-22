@@ -7,8 +7,18 @@ import { Briefcase, MessageSquare, ChevronRight, Activity, TrendingUp, Loader2 }
 import Link from "next/link";
 import ProjectGauge from "@/components/portal/project-gauge";
 
+interface Project {
+  id: string;
+  name: string;
+  status: string;
+  progress: number;
+  goal: number;
+  stretchGoal: number;
+  endDate?: string;
+}
+
 export default function PortalPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

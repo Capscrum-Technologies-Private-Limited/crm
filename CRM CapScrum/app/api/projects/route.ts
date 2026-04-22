@@ -65,6 +65,8 @@ export async function POST(req: Request) {
         status: status || "PENDING",
         startDate: startDate ? new Date(startDate) : new Date(),
         endDate: endDate ? new Date(endDate) : null,
+        totalValue: parseFloat(data.totalValue || "0"),
+        advanceAmount: parseFloat(data.advanceAmount || "0"),
       },
     });
 

@@ -1,6 +1,7 @@
 import { Server as NetServer } from 'http';
-import { NextApiRequest } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { Server as ServerIO } from 'socket.io';
+import { Socket } from 'net';
 
 export const config = {
   api: {
@@ -8,10 +9,20 @@ export const config = {
   },
 };
 
-export default function ioHandler(req: NextApiRequest, res: any) {
+interface SocketWithServer extends Socket {
+  server: NetServer & {
+    io?: ServerIO;
+  };
+}
+
+interface ResponseWithSocket extends NextApiResponse {
+  socket: SocketWithServer;
+}
+
+export default function ioHandler(req: NextApiRequest, res: ResponseWithSocket) {
   if (!res.socket.server.io) {
     const path = '/api/socket';
-    const httpServer: NetServer = res.socket.server as any;
+    const httpServer: NetServer = res.socket.server;
     
     // Enable CORS for development
     const io = new ServerIO(httpServer, {
