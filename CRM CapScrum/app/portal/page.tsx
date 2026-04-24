@@ -20,18 +20,31 @@ interface Project {
 export default function PortalPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [roadmapStats, setRoadmapStats] = useState<{ percentage: number } | null>(null);
 
   useEffect(() => {
+    // Fetch projects
     fetch("/api/projects")
       .then((res) => res.json())
       .then((payload) => {
-        // Handle paginated response structure { data: [], totalPages: n }
         const data = Array.isArray(payload) ? payload : (payload.data || []);
         setProjects(data);
+      })
+      .catch((err) => console.error("Failed to fetch projects:", err));
+
+    // Fetch roadmap stats
+    fetch("/api/pipeline")
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          const stages = data[0].pipelineStages;
+          const completed = stages.filter((s: any) => s.isCompleted).reduce((sum: number, s: any) => sum + s.percentage, 0);
+          setRoadmapStats({ percentage: completed });
+        }
         setLoading(false);
       })
-      .catch((err) => {
-        console.error("Failed to fetch projects:", err);
+      .catch(err => {
+        console.error("Failed to fetch roadmap:", err);
         setLoading(false);
       });
   }, []);
@@ -65,14 +78,14 @@ export default function PortalPage() {
 
       <div className="grid gap-10 md:grid-cols-3">
         {/* Progress Gauge Section */}
-        <div className="md:col-span-2 glass-card rounded-[3rem] shadow-2xl overflow-hidden flex flex-col relative group pt-12 pb-8 px-8">
+        <div className="md:col-span-2 glass-card rounded-lg shadow-2xl overflow-hidden flex flex-col relative group pt-12 pb-8 px-8">
           <div className="absolute top-0 left-0 w-full h-2 premium-gradient opacity-50" />
           
           <div className="text-center mb-4">
             <h3 className="text-3xl font-black text-foreground uppercase tracking-tighter">
-              Project <span className="text-primary">Vitality</span>
+              Strategic <span className="text-primary">Roadmap</span>
             </h3>
-            <p className="text-sm text-muted-foreground/40 font-black mt-2 uppercase tracking-[0.2em]">{activeProject?.name || "Initializing Portfolio..."}</p>
+            <p className="text-sm text-muted-foreground/40 font-black mt-2 uppercase tracking-[0.2em]">Overall Completion Analysis</p>
           </div>
 
           <div className="flex flex-col items-center justify-center py-8">
@@ -81,18 +94,25 @@ export default function PortalPage() {
                 <Loader2 className="h-10 w-10 animate-spin text-primary opacity-40" />
                 <span className="text-[10px] font-black text-foreground opacity-20 uppercase tracking-[0.3em]">Syncing Neural Data...</span>
               </div>
-            ) : activeProject ? (
-              <ProjectGauge 
-                progress={activeProject.progress || 0} 
-                goal={activeProject.goal || 100} 
-                stretchGoal={activeProject.stretchGoal || 120} 
-              />
+            ) : roadmapStats ? (
+              <div className="flex flex-col items-center gap-8">
+                <ProjectGauge 
+                  progress={roadmapStats.percentage || 0} 
+                  goal={100} 
+                  stretchGoal={100} 
+                />
+                <Link href="/portal/roadmap">
+                  <button className="px-8 py-3 rounded-xl premium-gradient text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                    Explore Strategic Roadmap
+                  </button>
+                </Link>
+              </div>
             ) : (
               <div className="h-[300px] flex flex-col items-center justify-center space-y-6 text-center px-10">
-                <div className="w-24 h-24 rounded-[2rem] bg-slate-50 border border-slate-200 flex items-center justify-center shadow-inner">
+                <div className="w-24 h-24 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center shadow-inner">
                   <Activity size={40} className="text-muted-foreground opacity-20" />
                 </div>
-                <p className="text-sm text-muted-foreground/40 font-medium max-w-xs uppercase tracking-widest leading-loose">Awaiting project initialization by your strategic account lead.</p>
+                <p className="text-sm text-muted-foreground/40 font-medium max-w-xs uppercase tracking-widest leading-loose">Awaiting roadmap initialization by your strategic account lead.</p>
               </div>
             )}
             
@@ -104,21 +124,23 @@ export default function PortalPage() {
                 <div className="flex justify-center">
                   <span className={cn(
                     "px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
-                    activeProject?.status === "COMPLETED" 
+                    roadmapStats?.percentage === 100 
                     ? "bg-emerald-50 text-emerald-600 border-emerald-200" 
-                    : "bg-blue-50 text-blue-600 border-blue-200"
+                    : roadmapStats?.percentage === 0
+                      ? "bg-slate-50 text-slate-400 border-slate-200"
+                      : "bg-blue-50 text-blue-600 border-blue-200"
                   )}>
-                    {activeProject?.status?.replace('_', ' ') || "OFFLINE"}
+                    {roadmapStats?.percentage === 100 ? "FULLY SYNCED" : roadmapStats?.percentage === 0 ? "IDLE" : "EXECUTING"}
                   </span>
                 </div>
               </div>
               <div className="text-center space-y-2">
-                <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.3em]">Strategic Deadline</p>
+                <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.3em]">Project Portfolio</p>
                 <div className="flex flex-col items-center">
                   <p className="text-lg font-black text-foreground drop-shadow-sm">
-                    {activeProject?.endDate ? new Date(activeProject.endDate).toLocaleDateString() : "TBD"}
+                    {projects.length} Initiatives
                   </p>
-                  <p className="text-[8px] font-bold text-muted-foreground/20 uppercase tracking-widest">Global Standard</p>
+                  <p className="text-[8px] font-bold text-muted-foreground/20 uppercase tracking-widest">Active Pulse Count</p>
                 </div>
               </div>
             </div>
@@ -127,22 +149,22 @@ export default function PortalPage() {
 
         {/* Sidebar Actions/Info */}
         <div className="space-y-10">
-           <div className="glass-card rounded-[2.5rem] p-8 flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
+           <div className="glass-card rounded-lg p-8 flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
              <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-             <div className="w-20 h-20 rounded-[1.5rem] bg-slate-50 border border-slate-200 flex items-center justify-center text-primary mb-6 shadow-xl group-hover:scale-110 transition-transform">
+             <div className="w-20 h-20 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-primary mb-6 shadow-xl group-hover:scale-110 transition-transform">
                <MessageSquare size={32} />
              </div>
              <h4 className="text-xl font-black text-foreground mb-2 tracking-tight">Direct Support</h4>
              <p className="text-[11px] text-muted-foreground/40 font-bold leading-loose uppercase tracking-widest mb-8">Synchronous assistance required? Our lead analysts are online.</p>
              <Link href="/portal/chat" className="w-full">
-               <button className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.03] active:scale-[0.98] transition-all">
+               <button className="w-full h-14 rounded-lg premium-gradient text-white font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.03] active:scale-[0.98] transition-all">
                  Launch Secure Chat
                </button>
              </Link>
            </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-[2.5rem] p-8 flex items-center gap-6 shadow-lg group hover:bg-slate-100 transition-all">
-             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform shadow-inner">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-8 flex items-center gap-6 shadow-lg group hover:bg-slate-100 transition-all">
+             <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform shadow-inner">
                <TrendingUp size={28} />
              </div>
              <div>
@@ -171,11 +193,11 @@ export default function PortalPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="group flex items-center justify-between p-8 rounded-[2.5rem] glass-card hover:border-primary/20 transition-all cursor-pointer shadow-xl relative overflow-hidden"
+                className="group flex items-center justify-between p-8 rounded-lg glass-card hover:border-primary/20 transition-all cursor-pointer shadow-xl relative overflow-hidden"
               >
                 <div className="absolute top-0 left-0 h-full w-1 premium-gradient opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="flex items-center gap-8">
-                  <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-muted-foreground/30 group-hover:bg-primary/10 group-hover:text-primary transition-all shadow-inner">
+                  <div className="w-16 h-16 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-muted-foreground/30 group-hover:bg-primary/10 group-hover:text-primary transition-all shadow-inner">
                     <Briefcase size={28} />
                   </div>
                   <div className="space-y-2">
@@ -202,7 +224,7 @@ export default function PortalPage() {
                       />
                    </div>
                    <div 
-                    className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-muted-foreground/20 group-hover:text-primary group-hover:border-primary/30 transition-all shadow-xl"
+                    className="w-14 h-14 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-muted-foreground/20 group-hover:text-primary group-hover:border-primary/30 transition-all shadow-xl"
                   >
                     <ChevronRight size={22} />
                   </div>
@@ -210,8 +232,8 @@ export default function PortalPage() {
               </motion.div>
             ))
           ) : (
-             <div className="py-20 glass-card rounded-[2.5rem] border-dashed text-center flex flex-col items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-muted-foreground/10">
+             <div className="py-20 glass-card rounded-lg border-dashed text-center flex flex-col items-center gap-4">
+                <div className="w-16 h-16 rounded-lg bg-slate-50 flex items-center justify-center text-muted-foreground/10">
                   <Briefcase size={32} />
                 </div>
                 <p className="text-sm text-muted-foreground/20 uppercase tracking-[0.3em] font-black">Portfolio Empty</p>
@@ -222,3 +244,4 @@ export default function PortalPage() {
     </motion.div>
   );
 }
+

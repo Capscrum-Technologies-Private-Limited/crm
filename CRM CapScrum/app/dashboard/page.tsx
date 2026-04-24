@@ -25,8 +25,6 @@ interface Stats {
   activeProjects: number;
   completedProjects: number;
   totalRevenue: number;
-  pipelineCount: number;
-  wonProjects: number;
   totalPaid: number;
   totalPending: number;
   totalOverdue: number;
@@ -126,14 +124,6 @@ export default function DashboardPage() {
       link: "/dashboard/projects",
     },
     {
-      title: "Pipeline Deals",
-      value: stats.pipelineCount || 0,
-      icon: TrendingUp,
-      color: "text-orange-600",
-      gradient: "from-orange-500/10 to-transparent",
-      link: "/dashboard/pipeline",
-    },
-    {
       title: "Invoices Paid",
       value: `₹${safeToLocaleString(stats.totalPaid)}`,
       icon: Receipt,
@@ -208,7 +198,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex gap-3">
           <Link href="/dashboard/projects">
-            <button className="px-6 py-3 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+            <button className="px-6 py-3 rounded-lg premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all">
               New Project
             </button>
           </Link>
@@ -226,7 +216,7 @@ export default function DashboardPage() {
           <Link key={card.title} href={card.link}>
             <motion.div
               variants={item}
-              className="glass-card p-6 rounded-[2rem] relative overflow-hidden group cursor-pointer hover:border-primary/20 transition-all"
+              className="glass-card p-6 rounded-lg relative overflow-hidden group cursor-pointer hover:border-primary/20 transition-all"
             >
               <div
                 className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${card.gradient} -mr-16 -mt-16 rounded-full blur-3xl opacity-50`}
@@ -234,7 +224,7 @@ export default function DashboardPage() {
 
               <div className="flex items-center justify-between mb-6">
                 <div
-                  className={`p-3.5 rounded-2xl bg-slate-50 border border-slate-200 ${card.color}`}
+                  className={`p-3.5 rounded-lg bg-slate-50 border border-slate-200 ${card.color}`}
                 >
                   <card.icon size={22} />
                 </div>
@@ -263,11 +253,11 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="glass-card rounded-[2.5rem] p-8"
+          className="glass-card rounded-lg p-8"
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-200">
+              <div className="p-3 rounded-lg bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-200">
                 <Target size={22} className="text-indigo-600" />
               </div>
               <div>
@@ -305,19 +295,19 @@ export default function DashboardPage() {
 
           {/* Stats Row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+            <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200">
               <p className="text-[10px] font-black text-emerald-600/60 uppercase tracking-[0.15em] mb-1">Received</p>
               <p className="text-lg font-black text-emerald-700">₹{safeToLocaleString(stats.amountReceived)}</p>
             </div>
-            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+            <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
               <p className="text-[10px] font-black text-amber-600/60 uppercase tracking-[0.15em] mb-1">Yet to Receive</p>
               <p className="text-lg font-black text-amber-700">₹{safeToLocaleString(stats.yetToReceive)}</p>
             </div>
-            <div className="p-4 rounded-2xl bg-green-50 border border-green-200">
+            <div className="p-4 rounded-lg bg-green-50 border border-green-200">
               <p className="text-[10px] font-black text-green-600/60 uppercase tracking-[0.15em] mb-1">Milestones Paid</p>
               <p className="text-lg font-black text-green-700">{stats.milestonesPaid}</p>
             </div>
-            <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200">
+            <div className="p-4 rounded-lg bg-orange-50 border border-orange-200">
               <p className="text-[10px] font-black text-orange-600/60 uppercase tracking-[0.15em] mb-1">Milestones Pending</p>
               <p className="text-lg font-black text-orange-700">{stats.milestonesPending}</p>
             </div>
@@ -332,14 +322,14 @@ export default function DashboardPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="lg:col-span-4 glass-card p-8 rounded-[2.5rem]"
+          className="lg:col-span-4 glass-card p-8 rounded-lg lg:h-[520px] flex flex-col"
         >
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 flex-shrink-0">
             <h3 className="text-xl font-bold text-foreground">
               Revenue Performance
             </h3>
           </div>
-          <div className="h-[400px] w-full">
+          <div className="flex-1 w-full min-h-0">
             <RevenueChart />
           </div>
         </motion.div>
@@ -349,59 +339,61 @@ export default function DashboardPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
-          className="lg:col-span-3 glass-card p-8 rounded-[2.5rem]"
+          className="lg:col-span-3 glass-card p-8 rounded-lg lg:h-[520px] flex flex-col"
         >
-          <h3 className="text-xl font-bold text-foreground mb-8">
+          <h3 className="text-xl font-bold text-foreground mb-8 flex-shrink-0">
             Recent Activity
           </h3>
-          <div className="space-y-6">
-            {stats.activities.length === 0 ? (
-              <div className="text-center py-12">
-                <Activity
-                  size={32}
-                  className="mx-auto text-muted-foreground/20 mb-3"
-                />
-                <p className="text-sm text-muted-foreground/40 font-medium">
-                  No recent activity
-                </p>
-              </div>
-            ) : (
-              stats.activities.slice(0, 8).map((activity, i) => {
-                const IconComp = getActivityIcon(activity.type);
-                const colorClass = getActivityColor(activity.type);
-                return (
-                  <Link
-                    key={i}
-                    href={activity.link || "#"}
-                    className="block"
-                  >
-                    <div className="flex items-start gap-4 group cursor-pointer">
-                      <div className="relative mt-0.5">
-                        <div
-                          className={`w-9 h-9 rounded-xl border flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ${colorClass}`}
-                        >
-                          <IconComp size={16} />
+          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-0">
+            <div className="space-y-6">
+              {stats.activities.length === 0 ? (
+                <div className="text-center py-12">
+                  <Activity
+                    size={32}
+                    className="mx-auto text-muted-foreground/20 mb-3"
+                  />
+                  <p className="text-sm text-muted-foreground/40 font-medium">
+                    No recent activity
+                  </p>
+                </div>
+              ) : (
+                stats.activities.map((activity, i) => {
+                  const IconComp = getActivityIcon(activity.type);
+                  const colorClass = getActivityColor(activity.type);
+                  return (
+                    <Link
+                      key={i}
+                      href={activity.link || "#"}
+                      className="block"
+                    >
+                      <div className="flex items-start gap-4 group cursor-pointer">
+                        <div className="relative mt-0.5">
+                          <div
+                            className={`w-9 h-9 rounded-md border flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ${colorClass}`}
+                          >
+                            <IconComp size={16} />
+                          </div>
+                          {i !== stats.activities.length - 1 && (
+                            <div className="absolute top-9 left-1/2 w-[1px] h-6 bg-gradient-to-b from-slate-200 to-transparent" />
+                          )}
                         </div>
-                        {i !== stats.activities.length - 1 && i < 7 && (
-                          <div className="absolute top-9 left-1/2 w-[1px] h-6 bg-gradient-to-b from-slate-200 to-transparent" />
-                        )}
+                        <div className="flex-1 min-w-0 pb-4">
+                          <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                            {activity.title}
+                          </p>
+                          <p className="text-xs text-muted-foreground/60 font-medium truncate">
+                            {activity.description}
+                          </p>
+                          <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-widest mt-1">
+                            {timeAgo(activity.time)}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0 pb-4">
-                        <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
-                          {activity.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground/60 font-medium truncate">
-                          {activity.description}
-                        </p>
-                        <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-widest mt-1">
-                          {timeAgo(activity.time)}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })
-            )}
+                    </Link>
+                  );
+                })
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
@@ -412,7 +404,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="glass-card rounded-[2rem] p-6 flex flex-wrap items-center gap-8"
+          className="glass-card rounded-lg p-6 flex flex-wrap items-center gap-8"
         >
           {stats.totalPending > 0 && (
             <div className="flex items-center gap-3">
@@ -442,3 +434,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

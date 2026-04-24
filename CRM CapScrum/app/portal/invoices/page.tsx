@@ -140,11 +140,11 @@ export default function PortalInvoicesPage() {
         </h3>
 
         {loading ? (
-          <div className="glass-card rounded-[2rem] p-12 flex justify-center">
+          <div className="glass-card rounded-lg p-12 flex justify-center">
             <Loader2 className="animate-spin text-primary w-8 h-8" />
           </div>
         ) : unpaidInvoices.length === 0 ? (
-          <div className="glass-card rounded-[2rem] p-12 text-center flex flex-col items-center justify-center">
+          <div className="glass-card rounded-lg p-12 text-center flex flex-col items-center justify-center">
             <CheckCircle2 size={48} className="text-emerald-500 mb-4 opacity-50" />
             <p className="font-bold text-foreground">You're all caught up!</p>
             <p className="text-sm text-muted-foreground mt-1">
@@ -156,7 +156,7 @@ export default function PortalInvoicesPage() {
             {unpaidInvoices.map((inv) => (
               <div
                 key={inv.id}
-                className="glass-card rounded-[2rem] p-6 md:p-8 flex flex-col border-primary/20 bg-primary/5"
+                className="glass-card rounded-lg p-6 md:p-8 flex flex-col border-primary/20 bg-primary/5"
               >
                 <div className="flex justify-between items-start mb-4">
                   {getStatusBadge(inv.status)}
@@ -207,7 +207,7 @@ export default function PortalInvoicesPage() {
                   <button
                     onClick={() => handlePay(inv.id)}
                     disabled={payingId === inv.id}
-                    className="flex-1 h-12 rounded-2xl bg-foreground text-white font-black text-sm hover:bg-foreground/90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="flex-1 h-12 rounded-lg bg-foreground text-white font-black text-sm hover:bg-foreground/90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {payingId === inv.id ? (
                       <Loader2 className="animate-spin" size={16} />
@@ -219,7 +219,7 @@ export default function PortalInvoicesPage() {
                   <button
                     onClick={() => downloadPDF(inv.id)}
                     disabled={downloading === inv.id}
-                    className="h-12 px-4 rounded-2xl border border-slate-200 bg-white text-foreground font-bold text-sm hover:bg-slate-50 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="h-12 px-4 rounded-lg border border-slate-200 bg-white text-foreground font-bold text-sm hover:bg-slate-50 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {downloading === inv.id ? (
                       <Loader2 className="animate-spin" size={16} />
@@ -242,7 +242,7 @@ export default function PortalInvoicesPage() {
           Payment History
         </h3>
 
-        <div className="glass-card rounded-[2.5rem] overflow-hidden flex flex-col w-full">
+        <div className="glass-card rounded-lg overflow-hidden flex flex-col w-full">
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left min-w-[700px]">
               <thead>
@@ -299,7 +299,7 @@ export default function PortalInvoicesPage() {
                         <button
                           onClick={() => downloadPDF(inv.id)}
                           disabled={downloading === inv.id}
-                          className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-muted-foreground hover:text-primary hover:border-primary/20 transition-all disabled:opacity-50"
+                          className="p-2.5 rounded-md bg-slate-50 border border-slate-200 text-muted-foreground hover:text-primary hover:border-primary/20 transition-all disabled:opacity-50"
                           title="Download PDF"
                         >
                           {downloading === inv.id ? (
@@ -320,3 +320,4 @@ export default function PortalInvoicesPage() {
     </motion.div>
   );
 }
+

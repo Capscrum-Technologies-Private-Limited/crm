@@ -187,12 +187,12 @@ export default function ProjectsPage() {
         
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <button className="px-8 py-4 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
+            <button className="px-8 py-4 rounded-lg premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
               <Plus size={20} />
               <span>Launch New Project</span>
             </button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-[2.5rem] p-8 shadow-2xl">
+          <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-lg p-8 shadow-2xl">
             <DialogHeader className="mb-6">
               <DialogTitle className="text-2xl font-black text-foreground">Project <span className="text-primary">Genesis</span></DialogTitle>
             </DialogHeader>
@@ -205,7 +205,7 @@ export default function ProjectsPage() {
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   required 
                   placeholder="e.g. Q4 Growth Campaign"
-                  className="h-14 bg-slate-50 border-slate-200 rounded-2xl text-foreground focus:border-primary/50 transition-all font-medium"
+                  className="h-14 bg-slate-50 border-slate-200 rounded-lg text-foreground focus:border-primary/50 transition-all font-medium"
                 />
               </div>
               <div className="space-y-2">
@@ -214,7 +214,7 @@ export default function ProjectsPage() {
                   id="description" 
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full min-h-[120px] rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary/50 transition-all font-medium placeholder:text-muted-foreground/30"
+                  className="w-full min-h-[120px] rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary/50 transition-all font-medium placeholder:text-muted-foreground/30"
                   placeholder="Define key milestones and success criteria..."
                 />
               </div>
@@ -225,7 +225,7 @@ export default function ProjectsPage() {
                   value={formData.clientId}
                   onChange={(e) => setFormData({...formData, clientId: e.target.value})}
                   required
-                  className="w-full h-14 bg-slate-50 border border-slate-200 rounded-2xl text-foreground px-4 focus:border-primary/50 transition-all appearance-none outline-none"
+                  className="w-full h-14 bg-slate-50 border border-slate-200 rounded-lg text-foreground px-4 focus:border-primary/50 transition-all appearance-none outline-none"
                 >
                   <option value="">Assign to client...</option>
                   {clients.map((client) => (
@@ -243,7 +243,7 @@ export default function ProjectsPage() {
                       value={formData.totalValue}
                       onChange={(e) => setFormData({...formData, totalValue: e.target.value})}
                       placeholder="Total Contract Value"
-                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                      className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-medium"
                     />
                   </div>
                   <div className="space-y-2">
@@ -253,7 +253,7 @@ export default function ProjectsPage() {
                       value={formData.advanceAmount}
                       onChange={(e) => setFormData({...formData, advanceAmount: e.target.value})}
                       placeholder="Down Payment"
-                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                      className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-medium"
                     />
                   </div>
                 </div>
@@ -266,7 +266,7 @@ export default function ProjectsPage() {
                       value={formData.startDate}
                       onChange={(e) => setFormData({...formData, startDate: e.target.value})}
                       required
-                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                      className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-medium"
                     />
                   </div>
                   <div className="space-y-2">
@@ -276,7 +276,7 @@ export default function ProjectsPage() {
                       type="date"
                       value={formData.endDate}
                       onChange={(e) => setFormData({...formData, endDate: e.target.value})}
-                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                      className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-medium"
                     />
                   </div>
                 </div>
@@ -284,7 +284,7 @@ export default function ProjectsPage() {
                 <button 
                   type="submit" 
                   disabled={submitting || !formData.clientId} 
-                  className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                  className="w-full h-14 rounded-lg premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                 >
                   {submitting ? <Loader2 className="animate-spin" /> : "Initiate Execution"}
                 </button>
@@ -301,15 +301,15 @@ export default function ProjectsPage() {
             <span className="text-xs font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Syncing Global Portfolio...</span>
           </div>
         ) : projects.length === 0 ? (
-          <div className="glass-card rounded-[2.5rem] border-dashed flex flex-col items-center justify-center py-24 space-y-6">
-            <div className="w-20 h-20 rounded-2xl bg-slate-50 flex items-center justify-center text-muted-foreground/40">
+          <div className="glass-card rounded-lg border-dashed flex flex-col items-center justify-center py-24 space-y-6">
+            <div className="w-20 h-20 rounded-lg bg-slate-50 flex items-center justify-center text-muted-foreground/40">
               <Briefcase size={40} />
             </div>
             <div className="text-center">
               <p className="font-extrabold text-2xl text-foreground mb-2">No Active Deployments</p>
               <p className="text-muted-foreground/60 font-medium max-w-sm mx-auto">Your project portfolio is currently quiet. Start by launching a new initiative.</p>
             </div>
-            <button onClick={() => setOpen(true)} className="px-6 py-3 rounded-xl bg-slate-100 border border-slate-200 text-foreground font-bold text-xs hover:bg-slate-200 transition-all">Add First Project</button>
+            <button onClick={() => setOpen(true)} className="px-6 py-3 rounded-md bg-slate-100 border border-slate-200 text-foreground font-bold text-xs hover:bg-slate-200 transition-all">Add First Project</button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -319,7 +319,7 @@ export default function ProjectsPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-card rounded-[2.5rem] hover:border-primary/30 transition-all group overflow-hidden flex flex-col shadow-2xl"
+                className="glass-card rounded-lg hover:border-primary/30 transition-all group overflow-hidden flex flex-col shadow-2xl"
               >
                 <div className="h-2 w-full premium-gradient opacity-30 group-hover:opacity-100 transition-opacity" />
                 <div className="p-8 space-y-8 flex-1 flex flex-col">
@@ -335,11 +335,11 @@ export default function ProjectsPage() {
                     <div className="flex gap-2">
                       <button 
                         onClick={() => openUpdateDialog(project)}
-                        className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-muted-foreground/60 hover:text-primary hover:bg-primary/5 hover:border-primary/20 transition-all"
+                        className="p-2.5 rounded-md bg-slate-50 border border-slate-200 text-muted-foreground/60 hover:text-primary hover:bg-primary/5 hover:border-primary/20 transition-all"
                       >
                          <Settings2 size={16} />
                       </button>
-                      <button className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-muted-foreground/60 hover:text-foreground transition-all">
+                      <button className="p-2.5 rounded-md bg-slate-50 border border-slate-200 text-muted-foreground/60 hover:text-foreground transition-all">
                          <ExternalLink size={16} />
                       </button>
                     </div>
@@ -394,7 +394,7 @@ export default function ProjectsPage() {
 
       {/* Update Progress Dialog - Bespoke Style */}
       <Dialog open={updateOpen} onOpenChange={setUpdateOpen}>
-        <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-[2.5rem] p-8 shadow-2xl">
+        <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-lg p-8 shadow-2xl">
           <DialogHeader className="mb-8">
             <DialogTitle className="text-2xl font-black text-foreground">Status <span className="text-primary">Update</span></DialogTitle>
           </DialogHeader>
@@ -404,7 +404,7 @@ export default function ProjectsPage() {
               <select 
                 value={updateData.status}
                 onChange={(e) => setUpdateData({...updateData, status: e.target.value})}
-                className="w-full h-14 bg-slate-50 border border-slate-200 rounded-2xl text-foreground px-4 outline-none appearance-none"
+                className="w-full h-14 bg-slate-50 border border-slate-200 rounded-lg text-foreground px-4 outline-none appearance-none"
               >
                 <option value="PENDING">Strategic Planning</option>
                 <option value="IN_PROGRESS">Active Execution</option>
@@ -439,7 +439,7 @@ export default function ProjectsPage() {
                   type="number"
                   value={updateData.goal}
                   onChange={(e) => setUpdateData({...updateData, goal: parseInt(e.target.value)})}
-                  className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-bold"
+                  className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-bold"
                 />
               </div>
               <div className="space-y-2">
@@ -448,7 +448,7 @@ export default function ProjectsPage() {
                   type="number"
                   value={updateData.stretchGoal}
                   onChange={(e) => setUpdateData({...updateData, stretchGoal: parseInt(e.target.value)})}
-                  className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-bold"
+                  className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-bold"
                 />
               </div>
             </div>
@@ -459,7 +459,7 @@ export default function ProjectsPage() {
                 type="date"
                 value={updateData.endDate}
                 onChange={(e) => setUpdateData({...updateData, endDate: e.target.value})}
-                className="h-14 bg-slate-50 border-slate-200 rounded-2xl text-foreground"
+                className="h-14 bg-slate-50 border-slate-200 rounded-lg text-foreground"
               />
             </div>
 
@@ -467,7 +467,7 @@ export default function ProjectsPage() {
               <button 
                 type="submit" 
                 disabled={submitting} 
-                className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                className="w-full h-14 rounded-lg premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
               >
                 {submitting ? <Loader2 className="animate-spin" /> : "Commit Status Change"}
               </button>
@@ -478,3 +478,4 @@ export default function ProjectsPage() {
     </motion.div>
   );
 }
+

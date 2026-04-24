@@ -190,18 +190,18 @@ export default function CalendarPage() {
         <div className="flex gap-3">
           <button
             onClick={goToToday}
-            className="px-6 py-3 rounded-2xl bg-slate-100 border border-slate-200 text-foreground font-bold text-sm hover:bg-slate-200 transition-all"
+            className="px-6 py-3 rounded-lg bg-slate-100 border border-slate-200 text-foreground font-bold text-sm hover:bg-slate-200 transition-all"
           >
             Today
           </button>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <button className="px-8 py-3 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
+              <button className="px-8 py-3 rounded-lg premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
                 <Plus size={20} />
                 <span>Add Event</span>
               </button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-[2.5rem] p-8 shadow-2xl">
+            <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-lg p-8 shadow-2xl">
               <DialogHeader className="mb-6">
                 <DialogTitle className="text-2xl font-black text-foreground">
                   New <span className="text-primary">Event</span>
@@ -215,7 +215,7 @@ export default function CalendarPage() {
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     required
                     placeholder="e.g. Sprint 3 Review"
-                    className="h-14 bg-slate-50 border-slate-200 rounded-2xl text-foreground focus:border-primary/50"
+                    className="h-14 bg-slate-50 border-slate-200 rounded-lg text-foreground focus:border-primary/50"
                   />
                 </div>
                 <div className="space-y-2">
@@ -224,7 +224,7 @@ export default function CalendarPage() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Optional details..."
-                    className="w-full min-h-[80px] rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary/50 font-medium placeholder:text-muted-foreground/30"
+                    className="w-full min-h-[80px] rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary/50 font-medium placeholder:text-muted-foreground/30"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -235,7 +235,7 @@ export default function CalendarPage() {
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                       required
-                      className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                      className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-medium"
                     />
                   </div>
                   <div className="space-y-2">
@@ -243,7 +243,7 @@ export default function CalendarPage() {
                     <select
                       value={formData.projectId}
                       onChange={(e) => setFormData({ ...formData, projectId: e.target.value })}
-                      className="w-full h-12 bg-slate-50 border border-slate-200 rounded-xl text-foreground px-4 outline-none appearance-none"
+                      className="w-full h-12 bg-slate-50 border border-slate-200 rounded-md text-foreground px-4 outline-none appearance-none"
                     >
                       <option value="">No project</option>
                       {projects.map((p: any) => (
@@ -263,7 +263,7 @@ export default function CalendarPage() {
                           type="button"
                           onClick={() => setFormData({ ...formData, type: key, color: config.defaultColor })}
                           className={cn(
-                            "p-3 rounded-xl border-2 flex flex-col items-center gap-1.5 transition-all text-center",
+                            "p-3 rounded-md border-2 flex flex-col items-center gap-1.5 transition-all text-center",
                             formData.type === key
                               ? "border-primary bg-primary/5"
                               : "border-slate-200 hover:border-slate-300"
@@ -280,7 +280,7 @@ export default function CalendarPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                    className="w-full h-14 rounded-lg premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                   >
                     {submitting ? <Loader2 className="animate-spin" /> : "Create Event"}
                   </button>
@@ -294,16 +294,16 @@ export default function CalendarPage() {
       {/* Calendar + Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Calendar Grid */}
-        <div className="lg:col-span-3 glass-card rounded-[2.5rem] overflow-hidden">
+        <div className="lg:col-span-3 glass-card rounded-lg overflow-hidden">
           {/* Month Navigation */}
           <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-            <button onClick={() => goToMonth(-1)} className="p-3 rounded-xl hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
+            <button onClick={() => goToMonth(-1)} className="p-3 rounded-md hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
               <ChevronLeft size={20} />
             </button>
             <h3 className="text-2xl font-black text-foreground tracking-tight">
               {MONTHS[month]} <span className="text-primary">{year}</span>
             </h3>
-            <button onClick={() => goToMonth(1)} className="p-3 rounded-xl hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
+            <button onClick={() => goToMonth(1)} className="p-3 rounded-md hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
               <ChevronRight size={20} />
             </button>
           </div>
@@ -383,7 +383,7 @@ export default function CalendarPage() {
         {/* Sidebar: Selected Day / Upcoming */}
         <div className="space-y-6">
           {/* Selected Day Detail */}
-          <div className="glass-card rounded-[2rem] p-6">
+          <div className="glass-card rounded-lg p-6">
             <div className="flex items-center justify-between mb-6">
               <h4 className="text-lg font-black text-foreground">
                 {selectedDay
@@ -393,7 +393,7 @@ export default function CalendarPage() {
               {selectedDay && (
                 <button
                   onClick={() => openCreateForDay(selectedDay)}
-                  className="p-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all"
+                  className="p-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-all"
                 >
                   <Plus size={16} />
                 </button>
@@ -410,7 +410,7 @@ export default function CalendarPage() {
                         key={m.id}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className={cn("p-4 rounded-2xl border transition-all group", m.completed ? "opacity-50" : "")}
+                        className={cn("p-4 rounded-lg border transition-all group", m.completed ? "opacity-50" : "")}
                         style={{ borderColor: `${m.color}30`, backgroundColor: `${m.color}05` }}
                       >
                         <div className="flex items-start gap-3">
@@ -471,7 +471,7 @@ export default function CalendarPage() {
           </div>
 
           {/* Legend */}
-          <div className="glass-card rounded-[2rem] p-6">
+          <div className="glass-card rounded-lg p-6">
             <h4 className="text-sm font-black text-foreground mb-4 uppercase tracking-wider">Legend</h4>
             <div className="space-y-3">
               {Object.entries(TYPE_CONFIG).map(([key, config]) => {
@@ -489,7 +489,7 @@ export default function CalendarPage() {
           </div>
 
           {/* Stats */}
-          <div className="glass-card rounded-[2rem] p-6">
+          <div className="glass-card rounded-lg p-6">
             <h4 className="text-sm font-black text-foreground mb-4 uppercase tracking-wider">This Month</h4>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
@@ -511,3 +511,4 @@ export default function CalendarPage() {
     </motion.div>
   );
 }
+

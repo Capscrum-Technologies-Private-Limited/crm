@@ -201,16 +201,26 @@ async function main() {
 
   console.log("✅ Invoices created");
 
-  // 6. Pipeline
-  await prisma.pipeline.createMany({
-    data: [
-      { clientId: client1.id, stage: "WON", value: 150000 },
-      { clientId: client2.id, stage: "WON", value: 250000 },
-      { clientId: client3.id, stage: "PROPOSAL_SENT", value: 75000 },
-    ],
-    skipDuplicates: true,
-  });
-  console.log("✅ Pipeline entries created");
+  // 6. Pipeline Stages (New Dynamic Structure)
+  const defaultStages = [
+    { name: "Onboarding & Proposal", percentage: 20, order: 1, description: "Initial onboarding and proposal submission" },
+    { name: "Requirements Gathering", percentage: 20, order: 2, description: "Detailed requirements documentation" },
+    { name: "UI/UX Design", percentage: 20, order: 3, description: "Figma design and client approval" },
+    { name: "Development Phase", percentage: 30, order: 4, description: "Core development and MVP build" },
+    { name: "Deployment", percentage: 10, order: 5, description: "Final deployment and handover" },
+  ];
+
+  for (const client of [client1, client2, client3]) {
+    await prisma.clientPipelineStage.createMany({
+      data: defaultStages.map(s => ({
+        ...s,
+        clientId: client.id,
+        isCompleted: client.status === "Onboarded" && s.order <= 2,
+        completedAt: (client.status === "Onboarded" && s.order <= 2) ? new Date() : null,
+      })),
+    });
+  }
+  console.log("✅ Pipeline stages created");
 
   // 7. Expenses
   await prisma.expense.createMany({

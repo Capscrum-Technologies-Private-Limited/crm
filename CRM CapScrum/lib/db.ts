@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 
-// Sync Version: 2026-04-14 - Ensuring new project metric fields are detected
+// Re-trigger build: 2026-04-24 - Updated Pipeline schema V2
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 const connectionString = `${process.env.DATABASE_URL}`;

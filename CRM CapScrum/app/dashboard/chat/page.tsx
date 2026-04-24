@@ -31,11 +31,11 @@ export default function DashboardChat() {
       className="grid grid-cols-1 md:grid-cols-4 gap-8 h-[calc(100vh-140px)]"
     >
       {/* Sidebar: Conversations */}
-      <div className="col-span-1 glass-card rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl">
+      <div className="col-span-1 glass-card rounded-lg flex flex-col overflow-hidden shadow-2xl">
         <div className="p-8 border-b border-slate-200 bg-slate-50/50">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-black text-foreground tracking-tight">Messages</h3>
-            <button className="p-2.5 rounded-xl bg-white border border-slate-200 text-primary hover:bg-primary/10 transition-all">
+            <button className="p-2.5 rounded-md bg-white border border-slate-200 text-primary hover:bg-primary/10 transition-all">
                <UserPlus size={18} />
             </button>
           </div>
@@ -43,7 +43,7 @@ export default function DashboardChat() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
             <Input 
               placeholder="Search pulse..." 
-              className="h-12 pl-12 bg-white border-slate-200 rounded-2xl text-foreground placeholder:text-muted-foreground/30 focus:border-primary/30 transition-all font-medium"
+              className="h-12 pl-12 bg-white border-slate-200 rounded-lg text-foreground placeholder:text-muted-foreground/30 focus:border-primary/30 transition-all font-medium"
             />
           </div>
         </div>
@@ -56,7 +56,7 @@ export default function DashboardChat() {
              </div>
           ) : clients.length === 0 ? (
              <div className="p-12 text-center space-y-4">
-               <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-muted-foreground/20 mx-auto">
+               <div className="w-16 h-16 rounded-lg bg-slate-50 flex items-center justify-center text-muted-foreground/20 mx-auto">
                  <UserPlus size={24} />
                </div>
                <div>
@@ -71,14 +71,14 @@ export default function DashboardChat() {
                   key={client.id}
                   onClick={() => setSelectedClient(client)}
                   className={cn(
-                    "flex items-center gap-4 p-4 rounded-[2rem] cursor-pointer transition-all border border-transparent group",
+                    "flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all border border-transparent group",
                     selectedClient?.id === client.id 
                     ? "bg-primary/10 border-primary/20 shadow-lg shadow-primary/5" 
                     : "hover:bg-slate-100 hover:border-slate-200"
                   )}
                 >
                   <div className="relative shrink-0">
-                    <div className="h-12 w-12 rounded-[1.25rem] bg-gradient-to-br from-primary/20 to-primary/5 border border-slate-200 flex items-center justify-center text-primary font-black text-sm group-hover:scale-110 transition-transform">
+                    <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-slate-200 flex items-center justify-center text-primary font-black text-sm group-hover:scale-110 transition-transform">
                       {client.contactPerson.substring(0, 2).toUpperCase()}
                     </div>
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-4 border-white rounded-full shadow-[0_0_10px_rgba(16,185,129,0.3)]" />
@@ -107,17 +107,17 @@ export default function DashboardChat() {
       {/* Main Chat Area */}
       <div className="col-span-3">
         {selectedClient ? (
-          <div className="h-full glass-card rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl relative">
+          <div className="h-full glass-card rounded-lg overflow-hidden flex flex-col shadow-2xl relative">
             <ChatComponent 
               receiverId={selectedClient.userId} 
               receiverName={selectedClient.contactPerson} 
             />
           </div>
         ) : (
-          <div className="h-full glass-card rounded-[2.5rem] flex items-center justify-center relative overflow-hidden group">
+          <div className="h-full glass-card rounded-lg flex items-center justify-center relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
             <div className="text-center space-y-8 max-w-sm px-8 relative z-10">
-              <div className="w-28 h-28 bg-slate-50 border border-slate-200 rounded-[2.5rem] mx-auto flex items-center justify-center shadow-2xl">
+              <div className="w-28 h-28 bg-slate-50 border border-slate-200 rounded-lg mx-auto flex items-center justify-center shadow-2xl">
                 <Search size={44} className="text-primary opacity-20 group-hover:opacity-40 transition-opacity" />
               </div>
               <div className="space-y-3">
@@ -126,7 +126,7 @@ export default function DashboardChat() {
                   Select a secure channel from the sidebar to initialize encrypted communication.
                 </p>
               </div>
-              <button className="px-10 py-4 rounded-2xl bg-slate-100 border border-slate-200 text-foreground font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-200 hover:border-primary/30 transition-all shadow-xl">
+              <button className="px-10 py-4 rounded-lg bg-slate-100 border border-slate-200 text-foreground font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-200 hover:border-primary/30 transition-all shadow-xl">
                 Initialize New Pulse
               </button>
             </div>
@@ -136,3 +136,4 @@ export default function DashboardChat() {
     </motion.div>
   );
 }
+

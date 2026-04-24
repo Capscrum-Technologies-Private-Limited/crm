@@ -59,7 +59,7 @@ export default function LoginPage() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full max-w-lg relative z-10"
       >
-        <div className="glass-card rounded-[3.5rem] shadow-2xl overflow-hidden p-12 md:p-16 flex flex-col relative group">
+        <div className="glass-card rounded-lg shadow-2xl overflow-hidden p-12 md:p-16 flex flex-col relative group">
           <div className="absolute top-0 left-0 w-full h-2 premium-gradient opacity-60" />
           
           <div className="flex flex-col items-center mb-12">
@@ -76,7 +76,7 @@ export default function LoginPage() {
                 width={128}
                 height={128}
                 priority
-                className="w-32 h-32 object-contain rounded-3xl shadow-2xl relative z-10 border border-slate-200"
+                className="w-32 h-32 object-contain rounded-lg shadow-2xl relative z-10 border border-slate-200"
               />
             </motion.div>
             <p className="text-[10px] font-black text-muted-foreground/50 uppercase tracking-[0.4em]">Next-Generation Enterprise CRM</p>
@@ -87,7 +87,7 @@ export default function LoginPage() {
               <motion.div 
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
-                className="bg-red-50 border border-red-200 text-red-600 text-[11px] font-black uppercase tracking-widest px-6 py-4 rounded-2xl flex items-center justify-center text-center leading-relaxed"
+                className="bg-red-50 border border-red-200 text-red-600 text-[11px] font-black uppercase tracking-widest px-6 py-4 rounded-lg flex items-center justify-center text-center leading-relaxed"
               >
                 {error}
               </motion.div>
@@ -103,7 +103,7 @@ export default function LoginPage() {
                   <input
                     type="email"
                     placeholder="Enter strategic ID"
-                    className="w-full h-16 pl-16 pr-8 bg-slate-50 border border-slate-200 rounded-2xl text-foreground outline-none focus:border-primary/40 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground/30 font-medium"
+                    className="w-full h-16 pl-16 pr-8 bg-slate-50 border border-slate-200 rounded-lg text-foreground outline-none focus:border-primary/40 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground/30 font-medium"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -120,7 +120,7 @@ export default function LoginPage() {
                   <input
                     type="password"
                     placeholder="Enter cipher"
-                    className="w-full h-16 pl-16 pr-8 bg-slate-50 border border-slate-200 rounded-2xl text-foreground outline-none focus:border-primary/40 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground/30 font-medium"
+                    className="w-full h-16 pl-16 pr-8 bg-slate-50 border border-slate-200 rounded-lg text-foreground outline-none focus:border-primary/40 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground/30 font-medium"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -131,7 +131,7 @@ export default function LoginPage() {
 
             <button 
               type="submit" 
-              className="w-full h-18 rounded-3xl premium-gradient text-white font-black text-[13px] uppercase tracking-[0.3em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed group/btn overflow-hidden"
+              className="w-full h-18 rounded-lg premium-gradient text-white font-black text-[13px] uppercase tracking-[0.3em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed group/btn overflow-hidden"
               disabled={loading}
             >
               {loading ? (
@@ -162,3 +162,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

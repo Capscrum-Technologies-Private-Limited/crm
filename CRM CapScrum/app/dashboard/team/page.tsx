@@ -165,12 +165,12 @@ export default function TeamPage() {
         
         <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) { setError(""); setSuccess(""); } }}>
           <DialogTrigger asChild>
-            <button className="px-8 py-4 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
+            <button className="px-8 py-4 rounded-lg premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
               <Plus size={20} />
               <span>Add Team Member</span>
             </button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-[2.5rem] p-8 shadow-2xl">
+          <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-lg p-8 shadow-2xl">
             <DialogHeader className="mb-6">
               <DialogTitle className="text-2xl font-black text-foreground">New Team <span className="text-primary">Member</span></DialogTitle>
             </DialogHeader>
@@ -179,7 +179,7 @@ export default function TeamPage() {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="bg-red-50 border border-red-200 text-red-600 text-sm font-bold px-5 py-3 rounded-2xl"
+                  className="bg-red-50 border border-red-200 text-red-600 text-sm font-bold px-5 py-3 rounded-lg"
                 >
                   {error}
                 </motion.div>
@@ -188,7 +188,7 @@ export default function TeamPage() {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm font-bold px-5 py-3 rounded-2xl flex items-center gap-2"
+                  className="bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm font-bold px-5 py-3 rounded-lg flex items-center gap-2"
                 >
                   <Check size={16} />
                   {success}
@@ -203,7 +203,7 @@ export default function TeamPage() {
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   required 
                   placeholder="e.g. Rahul Sharma"
-                  className="h-14 bg-slate-50 border-slate-200 rounded-2xl text-foreground focus:border-primary/50"
+                  className="h-14 bg-slate-50 border-slate-200 rounded-lg text-foreground focus:border-primary/50"
                 />
               </div>
               <div className="space-y-2">
@@ -217,7 +217,7 @@ export default function TeamPage() {
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                     required 
                     placeholder="team@capscrum.com"
-                    className="h-14 pl-12 bg-slate-50 border-slate-200 rounded-2xl text-foreground focus:border-primary/50"
+                    className="h-14 pl-12 bg-slate-50 border-slate-200 rounded-lg text-foreground focus:border-primary/50"
                   />
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function TeamPage() {
                     required 
                     minLength={6}
                     placeholder="Min. 6 characters"
-                    className="h-14 bg-slate-50 border-slate-200 rounded-2xl text-foreground focus:border-primary/50 pr-24"
+                    className="h-14 bg-slate-50 border-slate-200 rounded-lg text-foreground focus:border-primary/50 pr-24"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
                     <button 
@@ -272,7 +272,7 @@ export default function TeamPage() {
                     type="button"
                     onClick={() => setFormData({...formData, role: "TEAM"})}
                     className={cn(
-                      "p-4 rounded-2xl border-2 text-left transition-all",
+                      "p-4 rounded-lg border-2 text-left transition-all",
                       formData.role === "TEAM"
                         ? "border-primary bg-primary/5" 
                         : "border-slate-200 hover:border-slate-300"
@@ -286,7 +286,7 @@ export default function TeamPage() {
                     type="button"
                     onClick={() => setFormData({...formData, role: "ADMIN"})}
                     className={cn(
-                      "p-4 rounded-2xl border-2 text-left transition-all",
+                      "p-4 rounded-lg border-2 text-left transition-all",
                       formData.role === "ADMIN"
                         ? "border-amber-400 bg-amber-50" 
                         : "border-slate-200 hover:border-slate-300"
@@ -303,7 +303,7 @@ export default function TeamPage() {
                 <button 
                   type="submit" 
                   disabled={submitting} 
-                  className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                  className="w-full h-14 rounded-lg premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                 >
                   {submitting ? (
                     <>
@@ -320,9 +320,9 @@ export default function TeamPage() {
 
       {/* Team Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-card rounded-[2rem] p-6">
+        <div className="glass-card rounded-lg p-6">
           <div className="flex items-center gap-4">
-            <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600">
+            <div className="p-4 rounded-lg bg-blue-50 border border-blue-200 text-blue-600">
               <Users size={24} />
             </div>
             <div>
@@ -331,9 +331,9 @@ export default function TeamPage() {
             </div>
           </div>
         </div>
-        <div className="glass-card rounded-[2rem] p-6">
+        <div className="glass-card rounded-lg p-6">
           <div className="flex items-center gap-4">
-            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600">
+            <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-600">
               <Shield size={24} />
             </div>
             <div>
@@ -342,9 +342,9 @@ export default function TeamPage() {
             </div>
           </div>
         </div>
-        <div className="glass-card rounded-[2rem] p-6">
+        <div className="glass-card rounded-lg p-6">
           <div className="flex items-center gap-4">
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600">
+            <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600">
               <Users size={24} />
             </div>
             <div>
@@ -356,14 +356,14 @@ export default function TeamPage() {
       </div>
 
       {/* Team Table */}
-      <div className="glass-card rounded-[2.5rem] overflow-hidden">
+      <div className="glass-card rounded-lg overflow-hidden">
         <div className="p-8 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <h3 className="text-xl font-bold text-foreground">Team Directory</h3>
           <div className="relative w-full md:w-96">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60" />
             <Input 
               placeholder="Search team members..." 
-              className="h-12 pl-12 bg-slate-50 border-slate-200 rounded-2xl text-foreground placeholder:text-muted-foreground/30 focus:border-primary/30 font-medium"
+              className="h-12 pl-12 bg-slate-50 border-slate-200 rounded-lg text-foreground placeholder:text-muted-foreground/30 focus:border-primary/30 font-medium"
             />
           </div>
         </div>
@@ -393,7 +393,7 @@ export default function TeamPage() {
                 <tr>
                   <td colSpan={5} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-4">
-                      <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-muted-foreground/20">
+                      <div className="w-16 h-16 rounded-lg bg-slate-50 flex items-center justify-center text-muted-foreground/20">
                         <Users size={32} />
                       </div>
                       <div>
@@ -409,7 +409,7 @@ export default function TeamPage() {
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
                         <div className={cn(
-                          "w-11 h-11 rounded-xl flex items-center justify-center font-black text-sm",
+                          "w-11 h-11 rounded-md flex items-center justify-center font-black text-sm",
                           member.role === "ADMIN" 
                             ? "bg-amber-50 text-amber-600 border border-amber-200" 
                             : "bg-primary/10 text-primary border border-primary/20"
@@ -435,7 +435,7 @@ export default function TeamPage() {
                       <button 
                         onClick={() => handleDelete(member.id, member.name || member.email)}
                         disabled={deletingId === member.id}
-                        className="p-3 rounded-xl hover:bg-red-50 text-muted-foreground/30 hover:text-red-500 transition-all disabled:opacity-50"
+                        className="p-3 rounded-md hover:bg-red-50 text-muted-foreground/30 hover:text-red-500 transition-all disabled:opacity-50"
                         title="Remove team member"
                       >
                         {deletingId === member.id ? (
@@ -461,3 +461,4 @@ export default function TeamPage() {
     </motion.div>
   );
 }
+

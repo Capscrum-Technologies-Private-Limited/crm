@@ -239,12 +239,12 @@ export default function InvoicesPage() {
 
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <button className="px-8 py-4 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
+            <button className="px-8 py-4 rounded-lg premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
               <Plus size={20} />
               <span>Create Invoice</span>
             </button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[700px] !bg-white border-slate-200 rounded-[2.5rem] p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-[700px] !bg-white border-slate-200 rounded-lg p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader className="mb-4">
               <DialogTitle className="text-2xl font-black text-foreground">
                 New <span className="text-primary">Invoice</span>
@@ -259,7 +259,7 @@ export default function InvoicesPage() {
                     required
                     value={formData.clientId}
                     onChange={(e) => setFormData({ ...formData, clientId: e.target.value })}
-                    className="w-full h-12 bg-slate-50 border border-slate-200 rounded-xl text-foreground px-4 outline-none font-medium text-sm"
+                    className="w-full h-12 bg-slate-50 border border-slate-200 rounded-md text-foreground px-4 outline-none font-medium text-sm"
                   >
                     <option value="">Select Client...</option>
                     {clients.map((c) => (
@@ -272,7 +272,7 @@ export default function InvoicesPage() {
                   <select
                     value={formData.projectId}
                     onChange={(e) => setFormData({ ...formData, projectId: e.target.value })}
-                    className="w-full h-12 bg-slate-50 border border-slate-200 rounded-xl text-foreground px-4 outline-none font-medium text-sm"
+                    className="w-full h-12 bg-slate-50 border border-slate-200 rounded-md text-foreground px-4 outline-none font-medium text-sm"
                   >
                     <option value="">None</option>
                     {projects.map((p) => (
@@ -297,7 +297,7 @@ export default function InvoicesPage() {
                   </button>
                 </div>
 
-                <div className="border border-slate-200 rounded-2xl overflow-hidden">
+                <div className="border border-slate-200 rounded-lg overflow-hidden">
                   <div className="grid grid-cols-[1fr_80px_100px_100px_40px] gap-0 bg-slate-100 text-[10px] font-black text-muted-foreground/50 uppercase tracking-wider">
                     <div className="px-3 py-2.5">Description</div>
                     <div className="px-3 py-2.5 text-center">Qty</div>
@@ -348,7 +348,7 @@ export default function InvoicesPage() {
 
               {/* Totals */}
               <div className="flex justify-end">
-                <div className="w-72 space-y-2 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div className="w-72 space-y-2 p-4 bg-slate-50 rounded-lg border border-slate-200">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground font-medium">Subtotal</span>
                     <span className="font-bold text-foreground">
@@ -403,7 +403,7 @@ export default function InvoicesPage() {
                     required
                     value={formData.dueDate}
                     onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                    className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                    className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-medium"
                   />
                 </div>
                 <div className="space-y-2">
@@ -411,7 +411,7 @@ export default function InvoicesPage() {
                   <select
                     value={formData.templateId}
                     onChange={(e) => setFormData({ ...formData, templateId: e.target.value })}
-                    className="w-full h-12 bg-slate-50 border border-slate-200 rounded-xl text-foreground px-4 outline-none font-medium text-sm"
+                    className="w-full h-12 bg-slate-50 border border-slate-200 rounded-md text-foreground px-4 outline-none font-medium text-sm"
                   >
                     <option value="">Default</option>
                     {templates.map((t) => (
@@ -427,7 +427,7 @@ export default function InvoicesPage() {
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   placeholder="Payment terms, additional info..."
-                  className="w-full min-h-[80px] rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary/50 font-medium placeholder:text-muted-foreground/30"
+                  className="w-full min-h-[80px] rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary/50 font-medium placeholder:text-muted-foreground/30"
                 />
               </div>
 
@@ -435,7 +435,7 @@ export default function InvoicesPage() {
                 <button
                   type="submit"
                   disabled={submitting || !formData.clientId || lineItems.every((i) => !i.description)}
-                  className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+                  className="w-full h-14 rounded-lg premium-gradient text-white font-black text-sm shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
                 >
                   {submitting ? <Loader2 className="animate-spin" /> : "Issue Invoice"}
                 </button>
@@ -447,7 +447,7 @@ export default function InvoicesPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <div className="glass-card rounded-[2rem] p-6 text-foreground relative overflow-hidden group">
+        <div className="glass-card rounded-lg p-6 text-foreground relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
           <Receipt size={24} className="text-primary mb-4 relative z-10" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] relative z-10">
@@ -457,7 +457,7 @@ export default function InvoicesPage() {
             ₹{(totalOutstanding || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
         </div>
-        <div className="glass-card rounded-[2rem] p-6 text-foreground relative overflow-hidden group">
+        <div className="glass-card rounded-lg p-6 text-foreground relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors" />
           <CheckCircle2 size={24} className="text-emerald-500 mb-4 relative z-10" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] relative z-10">
@@ -467,7 +467,7 @@ export default function InvoicesPage() {
             ₹{(totalPaid || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
         </div>
-        <div className="glass-card rounded-[2rem] p-6 text-foreground relative overflow-hidden group bg-slate-50 border-slate-200">
+        <div className="glass-card rounded-lg p-6 text-foreground relative overflow-hidden group bg-slate-50 border-slate-200">
           <AlertCircle size={24} className="text-red-500 mb-4" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">
             Overdue Invoices
@@ -479,7 +479,7 @@ export default function InvoicesPage() {
       </div>
 
       {/* Table */}
-      <div className="glass-card rounded-[2.5rem] overflow-hidden flex flex-col">
+      <div className="glass-card rounded-lg overflow-hidden flex flex-col">
         <div className="p-6 md:p-8 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <h3 className="text-xl font-bold text-foreground">Invoice Repository</h3>
           <div className="relative w-full md:w-96">
@@ -488,7 +488,7 @@ export default function InvoicesPage() {
               placeholder="Search by client or invoice number..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-12 pl-12 bg-slate-50 border-slate-200 rounded-2xl text-foreground font-medium w-full"
+              className="h-12 pl-12 bg-slate-50 border-slate-200 rounded-lg text-foreground font-medium w-full"
             />
           </div>
         </div>
@@ -549,7 +549,7 @@ export default function InvoicesPage() {
                         <button
                           onClick={() => downloadPDF(inv.id)}
                           disabled={downloading === inv.id}
-                          className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-muted-foreground hover:text-primary hover:border-primary/20 transition-all disabled:opacity-50"
+                          className="p-2.5 rounded-md bg-slate-50 border border-slate-200 text-muted-foreground hover:text-primary hover:border-primary/20 transition-all disabled:opacity-50"
                           title="Download PDF"
                         >
                           {downloading === inv.id ? (
@@ -589,14 +589,14 @@ export default function InvoicesPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold bg-white text-foreground hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="px-4 py-2 rounded-md border border-slate-200 text-sm font-bold bg-white text-foreground hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               Prev
             </button>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
-              className="px-4 py-2 rounded-xl border border-primary text-sm font-bold bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="px-4 py-2 rounded-md border border-primary text-sm font-bold bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               Next
             </button>
@@ -606,3 +606,4 @@ export default function InvoicesPage() {
     </motion.div>
   );
 }
+

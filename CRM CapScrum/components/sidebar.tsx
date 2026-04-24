@@ -49,6 +49,7 @@ const Sidebar = ({ role, isOpen = false, onClose }: SidebarProps) => {
   const clientLinks = [
     { label: "Portal", icon: LayoutDashboard, href: "/portal" },
     { label: "Projects", icon: Briefcase, href: "/portal/projects" },
+    { label: "Roadmap", icon: GitGraph, href: "/portal/roadmap" },
     { label: "Billing", icon: Banknote, href: "/portal/invoices" },
     { label: "Chat", icon: MessageSquare, href: "/portal/chat" },
   ];
@@ -105,7 +106,7 @@ const Sidebar = ({ role, isOpen = false, onClose }: SidebarProps) => {
                 whileHover={{ x: 4 }}
                 whileTap={{ scale: 0.98 }}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 group",
+                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group",
                   isActive
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground hover:bg-slate-100"
@@ -140,8 +141,8 @@ const Sidebar = ({ role, isOpen = false, onClose }: SidebarProps) => {
 
       {/* Profile & Footer */}
       <div className="p-6 border-t border-slate-200 bg-slate-50/80">
-        <div className="flex items-center gap-4 p-3 rounded-2xl bg-slate-100 border border-slate-200 mb-4 group cursor-pointer transition-colors hover:bg-slate-200/60">
-          <div className="w-10 h-10 rounded-xl premium-gradient flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary/10">
+        <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-100 border border-slate-200 mb-4 group cursor-pointer transition-colors hover:bg-slate-200/60">
+          <div className="w-10 h-10 rounded-md premium-gradient flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary/10">
             <UserIcon size={20} />
           </div>
           <div className="flex-1 min-w-0">
@@ -154,7 +155,7 @@ const Sidebar = ({ role, isOpen = false, onClose }: SidebarProps) => {
         
         <button
           onClick={() => signOut({ callbackUrl: "/auth/login" })}
-          className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-bold text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all duration-300 border border-transparent hover:border-destructive/20"
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-md text-sm font-bold text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all duration-300 border border-transparent hover:border-destructive/20"
         >
           <LogOut size={16} />
           <span>Logout Session</span>
@@ -165,3 +166,4 @@ const Sidebar = ({ role, isOpen = false, onClose }: SidebarProps) => {
 };
 
 export default Sidebar;
+

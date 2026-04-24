@@ -21,21 +21,6 @@ enum ProjectStatus {
   COMPLETED
 }
 
-enum PipelineStage {
-  LEAD_IDENTIFICATION
-  ONBOARDING_PROPOSAL
-  REQUIREMENTS_DISCOVERY
-  DOCUMENTATION
-  PAYMENT_STRUCTURING
-  UI_DESIGN
-  ARCHITECTURE
-  PROJECT_EXECUTION
-  FINAL_PAYMENT
-  DEPLOYMENT
-  LOST
-  WON
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -67,10 +52,10 @@ model Client {
   userId        String?   @unique
   user          User?     @relation("UserToClient", fields: [userId], references: [id])
   
-  projects      Project[]
-  pipelines     Pipeline[]
-  invoices      Invoice[]
-  payments      Payment[]
+  projects       Project[]
+  pipelineStages ClientPipelineStage[]
+  invoices       Invoice[]
+  payments       Payment[]
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -98,6 +83,7 @@ model Project {
   billingStages BillingStage[]
   expenses      Expense[]
   payments      Payment[]
+  pipelineStages ClientPipelineStage[]
   
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -120,16 +106,23 @@ model BillingStage {
   updatedAt     DateTime  @updatedAt
 }
 
-model Pipeline {
-  id            String        @id @default(cuid())
-  stage         PipelineStage @default(LEAD_IDENTIFICATION)
-  value         Float         @default(0)
+model ClientPipelineStage {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  percentage  Int      @default(0) // Weight of this stage towards 100%
+  order       Int      @default(0)
+  isCompleted Boolean  @default(false)
+  completedAt DateTime?
   
-  clientId      String
-  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
   
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Message {

@@ -131,12 +131,12 @@ export default function TemplatesPage() {
         </div>
         <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
           <DialogTrigger asChild>
-            <button className="px-8 py-4 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center gap-2">
+            <button className="px-8 py-4 rounded-lg premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center gap-2">
               <Plus size={20} />
               <span>New Template</span>
             </button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[550px] !bg-white border-slate-200 rounded-[2.5rem] p-6 md:p-8 shadow-2xl max-h-[85vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-[550px] !bg-white border-slate-200 rounded-lg p-6 md:p-8 shadow-2xl max-h-[85vh] overflow-y-auto">
             <DialogHeader className="mb-4">
               <DialogTitle className="text-2xl font-black text-foreground">
                 {editing ? "Edit" : "New"} <span className="text-primary">Template</span>
@@ -150,7 +150,7 @@ export default function TemplatesPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. Professional Blue"
-                  className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                  className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-medium"
                 />
               </div>
 
@@ -164,7 +164,7 @@ export default function TemplatesPage() {
                       type="button"
                       onClick={() => setFormData({ ...formData, layout: l.value })}
                       className={cn(
-                        "p-4 rounded-xl border-2 transition-all text-center",
+                        "p-4 rounded-md border-2 transition-all text-center",
                         formData.layout === l.value
                           ? "border-primary bg-primary/5"
                           : "border-slate-200 hover:border-slate-300"
@@ -187,7 +187,7 @@ export default function TemplatesPage() {
                       type="button"
                       onClick={() => setFormData({ ...formData, colorPrimary: color })}
                       className={cn(
-                        "w-10 h-10 rounded-xl transition-all border-2",
+                        "w-10 h-10 rounded-md transition-all border-2",
                         formData.colorPrimary === color ? "border-foreground scale-110 shadow-lg" : "border-transparent"
                       )}
                       style={{ backgroundColor: color }}
@@ -197,7 +197,7 @@ export default function TemplatesPage() {
                     type="color"
                     value={formData.colorPrimary}
                     onChange={(e) => setFormData({ ...formData, colorPrimary: e.target.value })}
-                    className="w-10 h-10 rounded-xl cursor-pointer border-0"
+                    className="w-10 h-10 rounded-md cursor-pointer border-0"
                   />
                 </div>
               </div>
@@ -209,12 +209,12 @@ export default function TemplatesPage() {
                   value={formData.footerText}
                   onChange={(e) => setFormData({ ...formData, footerText: e.target.value })}
                   placeholder="Thank you for your business."
-                  className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground font-medium"
+                  className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground font-medium"
                 />
               </div>
 
               {/* Default toggle */}
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="flex items-center gap-3 p-4 rounded-md bg-slate-50 border border-slate-200">
                 <input
                   type="checkbox"
                   id="isDefault"
@@ -231,7 +231,7 @@ export default function TemplatesPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+                  className="w-full h-14 rounded-lg premium-gradient text-white font-black text-sm shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
                 >
                   {submitting ? <Loader2 className="animate-spin" /> : editing ? "Save Changes" : "Create Template"}
                 </button>
@@ -248,7 +248,7 @@ export default function TemplatesPage() {
             <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto opacity-40" />
           </div>
         ) : templates.length === 0 ? (
-          <div className="col-span-full glass-card rounded-[2.5rem] border-dashed py-20 text-center">
+          <div className="col-span-full glass-card rounded-lg border-dashed py-20 text-center">
             <FileText size={40} className="mx-auto text-muted-foreground/20 mb-4" />
             <p className="text-lg font-bold text-foreground/40">No templates yet</p>
             <p className="text-sm text-muted-foreground/40 mt-1">Create your first invoice template to get started.</p>
@@ -260,7 +260,7 @@ export default function TemplatesPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05 }}
-              className="glass-card rounded-[2rem] overflow-hidden group hover:border-primary/20 transition-all"
+              className="glass-card rounded-lg overflow-hidden group hover:border-primary/20 transition-all"
             >
               {/* Color preview bar */}
               <div className="h-3 w-full" style={{ backgroundColor: t.colorPrimary }} />
@@ -279,7 +279,7 @@ export default function TemplatesPage() {
                     </p>
                   </div>
                   <div
-                    className="w-10 h-10 rounded-xl border-2 border-white shadow-lg"
+                    className="w-10 h-10 rounded-md border-2 border-white shadow-lg"
                     style={{ backgroundColor: t.colorPrimary }}
                   />
                 </div>
@@ -297,13 +297,13 @@ export default function TemplatesPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => editTemplate(t)}
-                      className="p-2 rounded-xl text-muted-foreground/40 hover:text-primary hover:bg-primary/5 transition-all"
+                      className="p-2 rounded-md text-muted-foreground/40 hover:text-primary hover:bg-primary/5 transition-all"
                     >
                       <Edit3 size={16} />
                     </button>
                     <button
                       onClick={() => deleteTemplate(t.id)}
-                      className="p-2 rounded-xl text-muted-foreground/40 hover:text-red-500 hover:bg-red-50 transition-all"
+                      className="p-2 rounded-md text-muted-foreground/40 hover:text-red-500 hover:bg-red-50 transition-all"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -317,3 +317,4 @@ export default function TemplatesPage() {
     </motion.div>
   );
 }
+

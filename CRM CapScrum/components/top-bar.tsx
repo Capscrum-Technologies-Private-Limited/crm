@@ -78,7 +78,7 @@ export default function TopBar({ onMenuClick, isMobileMenuOpen }: TopBarProps) {
         {/* Mobile Menu Toggle */}
         <button 
           onClick={onMenuClick}
-          className="md:hidden p-2 rounded-xl text-foreground hover:bg-slate-100 transition-colors"
+          className="md:hidden p-2 rounded-md text-foreground hover:bg-slate-100 transition-colors"
         >
           <Menu size={24} />
         </button>
@@ -89,7 +89,7 @@ export default function TopBar({ onMenuClick, isMobileMenuOpen }: TopBarProps) {
         <div className="relative">
           <button 
             onClick={() => setShowDropdown(!showDropdown)}
-            className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-foreground/70 hover:text-primary hover:border-primary/30 transition-all shadow-sm relative group"
+            className="w-12 h-12 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-foreground/70 hover:text-primary hover:border-primary/30 transition-all shadow-sm relative group"
           >
             <Bell size={20} className={cn(unreadCount > 0 && "animate-[wiggle_1s_ease-in-out_infinite]")} />
             {unreadCount > 0 && (
@@ -107,7 +107,7 @@ export default function TopBar({ onMenuClick, isMobileMenuOpen }: TopBarProps) {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="absolute right-0 top-14 w-[340px] bg-white rounded-[2rem] shadow-2xl border border-slate-200 overflow-hidden z-50 origin-top-right flex flex-col max-h-[500px]"
+                className="absolute right-0 top-14 w-[340px] bg-white rounded-lg shadow-2xl border border-slate-200 overflow-hidden z-50 origin-top-right flex flex-col max-h-[500px]"
               >
                 <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                   <h3 className="font-black text-foreground">Notifications</h3>
@@ -136,7 +136,7 @@ export default function TopBar({ onMenuClick, isMobileMenuOpen }: TopBarProps) {
                         key={notification.id}
                         onClick={() => !notification.isRead && markAsRead(notification.id)}
                         className={cn(
-                          "p-4 rounded-2xl mb-1 cursor-pointer transition-all border",
+                          "p-4 rounded-lg mb-1 cursor-pointer transition-all border",
                           notification.isRead 
                             ? "bg-transparent border-transparent hover:bg-slate-50 opacity-60" 
                             : "bg-primary/5 hover:bg-primary/10 border-primary/10 relative"
@@ -166,3 +166,4 @@ export default function TopBar({ onMenuClick, isMobileMenuOpen }: TopBarProps) {
     </div>
   );
 }
+

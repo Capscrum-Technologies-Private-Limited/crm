@@ -110,7 +110,7 @@ export default function FinancesPage() {
         <div className="flex gap-3">
           <button 
             onClick={exportToCSV}
-            className="px-6 py-3 rounded-2xl bg-white border border-slate-200 text-foreground font-bold text-sm hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm"
+            className="px-6 py-3 rounded-lg bg-white border border-slate-200 text-foreground font-bold text-sm hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm"
           >
             <Download size={18} />
             <span>Export CSV</span>
@@ -118,7 +118,7 @@ export default function FinancesPage() {
           
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <button className="px-8 py-4 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+              <button className="px-8 py-4 rounded-lg premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                 <Plus size={20} />
                 <span>Record Payment</span>
               </button>
@@ -138,7 +138,7 @@ export default function FinancesPage() {
 
       {/* Financial Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-card rounded-[2.5rem] p-8 relative overflow-hidden group border-emerald-500/10">
+        <div className="glass-card rounded-lg p-8 relative overflow-hidden group border-emerald-500/10">
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Total Recieved</p>
           <div className="flex items-baseline gap-2">
@@ -149,7 +149,7 @@ export default function FinancesPage() {
             </div>
           </div>
         </div>
-        <div className="glass-card rounded-[2.5rem] p-8 relative overflow-hidden group border-blue-500/10">
+        <div className="glass-card rounded-lg p-8 relative overflow-hidden group border-blue-500/10">
           <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Advance Capital</p>
           <div className="flex items-baseline gap-2">
@@ -157,7 +157,7 @@ export default function FinancesPage() {
             <span className="text-xs font-bold text-muted-foreground/60">Secured</span>
           </div>
         </div>
-        <div className="glass-card rounded-[2.5rem] p-8 relative overflow-hidden group border-amber-500/10">
+        <div className="glass-card rounded-lg p-8 relative overflow-hidden group border-amber-500/10">
           <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Projected Inflow</p>
           <div className="flex items-baseline gap-2">
@@ -178,13 +178,13 @@ export default function FinancesPage() {
                   <input 
                     type="text" 
                     placeholder="Filter by client..."
-                    className="pl-9 h-10 w-48 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold focus:outline-none focus:border-primary/30"
+                    className="pl-9 h-10 w-48 rounded-md bg-slate-50 border border-slate-100 text-xs font-bold focus:outline-none focus:border-primary/30"
                   />
                 </div>
              </div>
           </div>
 
-          <div className="glass-card rounded-[3rem] overflow-hidden border-slate-100/50">
+          <div className="glass-card rounded-lg overflow-hidden border-slate-100/50">
              <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                    <thead>
@@ -213,7 +213,7 @@ export default function FinancesPage() {
                         <tr key={payment.id} className="hover:bg-slate-50/50 transition-colors group">
                            <td className="px-8 py-6">
                               <div className="flex items-center gap-4">
-                                 <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                 <div className="w-10 h-10 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center">
                                     <CreditCard size={18} />
                                  </div>
                                  <div className="flex flex-col">
@@ -250,7 +250,7 @@ export default function FinancesPage() {
         {/* Breakdown Card */}
         <div className="space-y-6">
            <h3 className="text-xl font-black text-foreground px-2">Revenue <span className="text-primary">Breakdown</span></h3>
-           <div className="glass-card rounded-[3rem] p-8 border-slate-100/50">
+           <div className="glass-card rounded-lg p-8 border-slate-100/50">
               <div className="space-y-6">
                  <div>
                     <div className="flex justify-between items-center mb-2">
@@ -281,7 +281,7 @@ export default function FinancesPage() {
                  </div>
               </div>
 
-              <div className="mt-10 p-6 rounded-[2rem] bg-slate-50 border border-slate-100/50">
+              <div className="mt-10 p-6 rounded-lg bg-slate-50 border border-slate-100/50">
                  <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm">
                        <PieChart size={14} className="text-primary" />
@@ -298,3 +298,4 @@ export default function FinancesPage() {
     </motion.div>
   );
 }
+

@@ -179,12 +179,12 @@ export default function ClientsPage() {
           }
         }}>
           <DialogTrigger asChild>
-            <button className="px-8 py-4 rounded-2xl premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
+            <button className="px-8 py-4 rounded-lg premium-gradient text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
               <Plus size={20} />
               <span>Register New Client</span>
             </button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-[2.5rem] p-8 shadow-2xl">
+          <DialogContent className="sm:max-w-[500px] !bg-white border-slate-200 rounded-lg p-8 shadow-2xl">
             <DialogHeader className="mb-6">
               <DialogTitle className="text-2xl font-black text-foreground">
                 {isViewMode ? "Client Details" : editId ? "Edit Client" : "New Client Registry"}
@@ -200,7 +200,7 @@ export default function ClientsPage() {
                   onChange={(e) => setFormData({...formData, companyName: e.target.value})}
                   required 
                   placeholder="e.g. Acme Corporation"
-                  className="h-14 bg-slate-50 border-slate-200 rounded-2xl text-foreground focus:border-primary/50 transition-all"
+                  className="h-14 bg-slate-50 border-slate-200 rounded-lg text-foreground focus:border-primary/50 transition-all"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -213,7 +213,7 @@ export default function ClientsPage() {
                     onChange={(e) => setFormData({...formData, contactPerson: e.target.value})}
                     required 
                     placeholder="Full Name"
-                    className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground"
+                    className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground"
                   />
                 </div>
                 <div className="space-y-2">
@@ -224,7 +224,7 @@ export default function ClientsPage() {
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     placeholder="+91 ..."
-                    className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground"
+                    className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground"
                   />
                 </div>
               </div>
@@ -238,13 +238,13 @@ export default function ClientsPage() {
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   required 
                   placeholder="client@acme.com"
-                  className="h-12 bg-slate-50 border-slate-200 rounded-xl text-foreground"
+                  className="h-12 bg-slate-50 border-slate-200 rounded-md text-foreground"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Currency Preference</Label>
-                  <div className="flex p-1 bg-slate-100 rounded-xl">
+                  <div className="flex p-1 bg-slate-100 rounded-md">
                     <button
                       type="button"
                       disabled={isViewMode}
@@ -284,12 +284,12 @@ export default function ClientsPage() {
                       value={formData.revenue}
                       onChange={(e) => setFormData({...formData, revenue: e.target.value})}
                       placeholder={formData.currency === "INR" ? "5,00,000" : "5,000"}
-                      className="h-12 pl-10 bg-slate-50 border-slate-200 rounded-xl text-foreground"
+                      className="h-12 pl-10 bg-slate-50 border-slate-200 rounded-md text-foreground"
                     />
                   </div>
                 </div>
               </div>
-              <div className="flex items-center space-x-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="flex items-center space-x-3 p-4 rounded-lg bg-slate-50 border border-slate-200">
                 <input 
                   type="checkbox" 
                   id="onboard" 
@@ -307,7 +307,7 @@ export default function ClientsPage() {
                   <button 
                     type="submit" 
                     disabled={submitting} 
-                    className="w-full h-14 rounded-2xl premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                    className="w-full h-14 rounded-lg premium-gradient text-white font-black text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                   >
                     {submitting ? (
                       <>
@@ -323,14 +323,14 @@ export default function ClientsPage() {
         </Dialog>
       </div>
 
-      <div className="glass-card rounded-[2.5rem] overflow-hidden">
+      <div className="glass-card rounded-lg overflow-hidden">
         <div className="p-8 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <h3 className="text-xl font-bold text-foreground">Active Portfolio</h3>
           <div className="relative w-full md:w-96">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60" />
             <Input 
               placeholder="Search by company or lead..." 
-              className="h-12 pl-12 bg-slate-50 border-slate-200 rounded-2xl text-foreground placeholder:text-muted-foreground/30 focus:border-primary/30 transition-all font-medium"
+              className="h-12 pl-12 bg-slate-50 border-slate-200 rounded-lg text-foreground placeholder:text-muted-foreground/30 focus:border-primary/30 transition-all font-medium"
             />
           </div>
         </div>
@@ -367,7 +367,7 @@ export default function ClientsPage() {
                   <tr key={client.id} className="hover:bg-slate-50 transition-colors group">
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black text-sm">
+                        <div className="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center text-primary font-black text-sm">
                           {client.companyName.substring(0, 1).toUpperCase()}
                         </div>
                         <span className="font-bold text-foreground text-base">{client.companyName}</span>
@@ -391,20 +391,20 @@ export default function ClientsPage() {
                     <td className="px-8 py-6 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <button className="p-3 rounded-xl hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
+                          <button className="p-3 rounded-md hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
                             <MoreHorizontal size={20} />
                           </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-[160px] rounded-2xl p-2">
+                        <DropdownMenuContent align="end" className="w-[160px] rounded-lg p-2">
                           <DropdownMenuLabel className="text-xs font-black text-muted-foreground/50 uppercase tracking-[0.2em] mb-1">Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="cursor-pointer font-bold text-sm rounded-xl mb-1 focus:bg-slate-50 transition-colors" onClick={() => handleView(client)}>
+                          <DropdownMenuItem className="cursor-pointer font-bold text-sm rounded-md mb-1 focus:bg-slate-50 transition-colors" onClick={() => handleView(client)}>
                             View Details
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer font-bold text-sm rounded-xl mb-1 focus:bg-slate-50 transition-colors" onClick={() => handleEdit(client)}>
+                          <DropdownMenuItem className="cursor-pointer font-bold text-sm rounded-md mb-1 focus:bg-slate-50 transition-colors" onClick={() => handleEdit(client)}>
                             Edit Client
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-500 hover:!text-red-600 focus:!text-red-600 hover:!bg-red-50 focus:!bg-red-50 cursor-pointer font-bold text-sm rounded-xl transition-colors" onClick={() => deleteClient(client.id)}>
+                          <DropdownMenuItem className="text-red-500 hover:!text-red-600 focus:!text-red-600 hover:!bg-red-50 focus:!bg-red-50 cursor-pointer font-bold text-sm rounded-md transition-colors" onClick={() => deleteClient(client.id)}>
                             Delete Client
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -423,14 +423,14 @@ export default function ClientsPage() {
               <button 
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold bg-white text-foreground hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="px-4 py-2 rounded-md border border-slate-200 text-sm font-bold bg-white text-foreground hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                  Prev
               </button>
               <button 
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages}
-                className="px-4 py-2 rounded-xl border border-primary text-sm font-bold bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="px-4 py-2 rounded-md border border-primary text-sm font-bold bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                  Next
               </button>
@@ -440,3 +440,4 @@ export default function ClientsPage() {
     </motion.div>
   );
 }
+

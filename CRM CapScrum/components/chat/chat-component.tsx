@@ -150,7 +150,7 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
       <div className="px-8 py-6 border-b border-slate-200 bg-slate-50/50 backdrop-blur-md flex items-center justify-between z-10">
         <div className="flex items-center gap-4">
           <div className="relative group shrink-0">
-            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-slate-200 flex items-center justify-center text-primary font-black text-xl group-hover:scale-105 transition-transform">
+            <div className="h-14 w-14 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-slate-200 flex items-center justify-center text-primary font-black text-xl group-hover:scale-105 transition-transform">
               {receiverName.substring(0, 2).toUpperCase()}
             </div>
             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-4 border-white rounded-full shadow-[0_0_15px_rgba(16,185,129,0.4)]" />
@@ -166,13 +166,13 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button className="p-3 rounded-xl bg-white border border-slate-200 text-muted-foreground/60 hover:text-foreground hover:bg-slate-100 transition-all">
+          <button className="p-3 rounded-md bg-white border border-slate-200 text-muted-foreground/60 hover:text-foreground hover:bg-slate-100 transition-all">
             <Phone size={18} />
           </button>
-          <button className="p-3 rounded-xl bg-white border border-slate-200 text-muted-foreground/60 hover:text-foreground hover:bg-slate-100 transition-all">
+          <button className="p-3 rounded-md bg-white border border-slate-200 text-muted-foreground/60 hover:text-foreground hover:bg-slate-100 transition-all">
             <Video size={18} />
           </button>
-          <button className="p-3 rounded-xl bg-white border border-slate-200 text-muted-foreground/60 hover:text-foreground transition-all">
+          <button className="p-3 rounded-md bg-white border border-slate-200 text-muted-foreground/60 hover:text-foreground transition-all">
             <MoreVertical size={20} />
           </button>
         </div>
@@ -202,7 +202,7 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
                   <div className="space-y-1.5 flex flex-col items-start">
                     <div
                       className={cn(
-                        "rounded-[2rem] px-6 py-4 text-sm font-medium shadow-lg transition-all border",
+                        "rounded-lg px-6 py-4 text-sm font-medium shadow-lg transition-all border",
                         isMe
                           ? "premium-gradient text-white rounded-tr-none border-primary/20 shadow-primary/10"
                           : "bg-slate-100 text-foreground/90 rounded-tl-none border-slate-200"
@@ -211,7 +211,7 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
                       {msg.content && <p className="leading-relaxed">{msg.content}</p>}
                       {msg.attachmentUrl && (
                         <div className={cn(
-                          "mt-2 p-3 rounded-2xl bg-white/10 border border-white/20 flex items-center gap-3 transition-colors hover:bg-white/20 cursor-pointer",
+                          "mt-2 p-3 rounded-lg bg-white/10 border border-white/20 flex items-center gap-3 transition-colors hover:bg-white/20 cursor-pointer",
                           !isMe && "bg-slate-200/50 border-slate-300 text-slate-700"
                         )}>
                           <div className={cn(
@@ -248,12 +248,12 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
       <div className="p-6 border-t border-slate-200 bg-slate-50/50 backdrop-blur-xl">
         <form onSubmit={sendMessage} className="flex gap-4 items-center">
           <div className="relative flex-1 group">
-            <div className="absolute inset-0 bg-primary/10 rounded-[2rem] blur-xl opacity-0 group-focus-within:opacity-20 transition-opacity" />
+            <div className="absolute inset-0 bg-primary/10 rounded-lg blur-xl opacity-0 group-focus-within:opacity-20 transition-opacity" />
             <input
               placeholder="Inject secure message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="relative w-full h-14 bg-white border border-slate-200 rounded-[2rem] px-8 pl-14 text-sm text-foreground focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all font-medium placeholder:text-muted-foreground/30"
+              className="relative w-full h-14 bg-white border border-slate-200 rounded-lg px-8 pl-14 text-sm text-foreground focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all font-medium placeholder:text-muted-foreground/30"
             />
             <label className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center rounded-full hover:bg-slate-50 text-muted-foreground/50 cursor-pointer transition-all">
               <Paperclip size={20} />
@@ -271,3 +271,4 @@ export default function ChatComponent({ receiverId, receiverName }: { receiverId
     </div>
   );
 }
+

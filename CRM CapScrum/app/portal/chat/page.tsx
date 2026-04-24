@@ -32,7 +32,7 @@ export default function PortalChat() {
     >
        <div className="flex flex-col space-y-4 px-2">
         <h2 className="text-5xl font-black tracking-tight text-foreground flex items-center gap-6">
-          <div className="p-4 rounded-[1.5rem] bg-slate-50 border border-slate-200 shadow-xl text-primary">
+          <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 shadow-xl text-primary">
             <MessageSquare size={36} />
           </div>
           Support <span className="text-primary">Ops</span>
@@ -42,7 +42,7 @@ export default function PortalChat() {
         </p>
       </div>
 
-      <div className="flex-1 min-h-0 glass-card rounded-[3rem] overflow-hidden shadow-2xl relative">
+      <div className="flex-1 min-h-0 glass-card rounded-lg overflow-hidden shadow-2xl relative">
         {selectedMember ? (
           <ChatComponent 
             receiverId={selectedMember.id} 

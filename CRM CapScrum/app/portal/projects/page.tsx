@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Briefcase, Calendar, Clock, ExternalLink, Activity, ArrowLeft, Loader2 } from "lucide-react";
+import { Briefcase, Calendar, Clock, ExternalLink, Activity, ArrowLeft, Loader2, GitGraph } from "lucide-react";
 import Link from "next/link";
 
 export default function PortalProjectsPage() {
@@ -64,8 +64,8 @@ export default function PortalProjectsPage() {
             <span className="text-[10px] font-black text-foreground opacity-20 uppercase tracking-[0.3em]">Querying Global Repository...</span>
           </div>
         ) : projects.length === 0 ? (
-          <div className="glass-card rounded-[3rem] border-dashed py-32 flex flex-col items-center justify-center space-y-8">
-            <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 flex items-center justify-center text-muted-foreground/10">
+          <div className="glass-card rounded-lg border-dashed py-32 flex flex-col items-center justify-center space-y-8">
+            <div className="w-24 h-24 rounded-lg bg-slate-50 flex items-center justify-center text-muted-foreground/10">
               <Briefcase size={44} />
             </div>
             <div className="text-center">
@@ -81,7 +81,7 @@ export default function PortalProjectsPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-card rounded-[3rem] hover:border-primary/20 transition-all group overflow-hidden flex flex-col shadow-2xl relative"
+                className="glass-card rounded-lg hover:border-primary/20 transition-all group overflow-hidden flex flex-col shadow-2xl relative"
               >
                 <div className="h-2 w-full premium-gradient opacity-20 group-hover:opacity-100 transition-opacity" />
                 <div className="p-10 space-y-10 flex-1 flex flex-col">
@@ -94,9 +94,11 @@ export default function PortalProjectsPage() {
                     )}>
                       {project.status.replace('_', ' ')}
                     </span>
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-muted-foreground/20 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all cursor-pointer shadow-xl">
-                       <ExternalLink size={18} />
-                    </div>
+                    <Link href="/portal/roadmap">
+                      <div className="w-12 h-12 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-muted-foreground/20 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all cursor-pointer shadow-xl">
+                         <GitGraph size={18} />
+                      </div>
+                    </Link>
                   </div>
 
                   <h3 className="text-3xl font-black text-foreground group-hover:text-primary transition-colors tracking-tighter leading-[1.1]">
@@ -150,3 +152,4 @@ export default function PortalProjectsPage() {
     </motion.div>
   );
 }
+
