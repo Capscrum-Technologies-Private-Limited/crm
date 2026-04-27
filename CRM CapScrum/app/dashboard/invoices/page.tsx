@@ -349,7 +349,7 @@ export default function InvoicesPage() {
               {/* Totals */}
               <div className="flex justify-end">
                 <div className="w-72 space-y-2 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                  <div className="flex justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground font-medium">Subtotal</span>
                     <span className="font-bold text-foreground">
                       ₹{(subtotal || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
@@ -367,10 +367,10 @@ export default function InvoicesPage() {
                     />
                   </div>
                   {taxAmount > 0 && (
-                    <div className="flex justify-between text-sm">
+                    <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground font-medium">Tax Amount</span>
                       <span className="font-medium text-foreground">
-                        +₹{(taxAmount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                        ₹{(taxAmount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                   )}
@@ -447,7 +447,7 @@ export default function InvoicesPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <div className="glass-card rounded-lg p-6 text-foreground relative overflow-hidden group">
+        <div className="glass-card single-sided-gradient rounded-lg p-6 text-foreground relative overflow-hidden group shadow-xl shadow-primary/5">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
           <Receipt size={24} className="text-primary mb-4 relative z-10" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] relative z-10">
@@ -457,7 +457,7 @@ export default function InvoicesPage() {
             ₹{(totalOutstanding || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
         </div>
-        <div className="glass-card rounded-lg p-6 text-foreground relative overflow-hidden group">
+        <div className="glass-card single-sided-gradient rounded-lg p-6 text-foreground relative overflow-hidden group shadow-xl shadow-primary/5">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors" />
           <CheckCircle2 size={24} className="text-emerald-500 mb-4 relative z-10" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] relative z-10">
@@ -467,7 +467,7 @@ export default function InvoicesPage() {
             ₹{(totalPaid || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
         </div>
-        <div className="glass-card rounded-lg p-6 text-foreground relative overflow-hidden group bg-slate-50 border-slate-200">
+        <div className="glass-card single-sided-gradient rounded-lg p-6 text-foreground relative overflow-hidden group bg-slate-50 border-slate-200 shadow-xl shadow-primary/5">
           <AlertCircle size={24} className="text-red-500 mb-4" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">
             Overdue Invoices
@@ -479,7 +479,7 @@ export default function InvoicesPage() {
       </div>
 
       {/* Table */}
-      <div className="glass-card rounded-lg overflow-hidden flex flex-col">
+      <div className="glass-card single-sided-gradient rounded-lg overflow-hidden flex flex-col shadow-2xl shadow-primary/5">
         <div className="p-6 md:p-8 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <h3 className="text-xl font-bold text-foreground">Invoice Repository</h3>
           <div className="relative w-full md:w-96">

@@ -138,7 +138,7 @@ export default function FinancesPage() {
 
       {/* Financial Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-card rounded-lg p-8 relative overflow-hidden group border-emerald-500/10">
+        <div className="glass-card single-sided-gradient rounded-lg p-8 relative overflow-hidden group border-emerald-500/10 shadow-xl shadow-primary/5">
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Total Recieved</p>
           <div className="flex items-baseline gap-2">
@@ -149,7 +149,7 @@ export default function FinancesPage() {
             </div>
           </div>
         </div>
-        <div className="glass-card rounded-lg p-8 relative overflow-hidden group border-blue-500/10">
+        <div className="glass-card single-sided-gradient rounded-lg p-8 relative overflow-hidden group border-blue-500/10 shadow-xl shadow-primary/5">
           <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Advance Capital</p>
           <div className="flex items-baseline gap-2">
@@ -157,7 +157,7 @@ export default function FinancesPage() {
             <span className="text-xs font-bold text-muted-foreground/60">Secured</span>
           </div>
         </div>
-        <div className="glass-card rounded-lg p-8 relative overflow-hidden group border-amber-500/10">
+        <div className="glass-card single-sided-gradient rounded-lg p-8 relative overflow-hidden group border-amber-500/10 shadow-xl shadow-primary/5">
           <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-2">Projected Inflow</p>
           <div className="flex items-baseline gap-2">
@@ -184,7 +184,7 @@ export default function FinancesPage() {
              </div>
           </div>
 
-          <div className="glass-card rounded-lg overflow-hidden border-slate-100/50">
+          <div className="glass-card single-sided-gradient rounded-lg overflow-hidden border-slate-100/50 shadow-2xl shadow-primary/5">
              <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                    <thead>
@@ -250,7 +250,7 @@ export default function FinancesPage() {
         {/* Breakdown Card */}
         <div className="space-y-6">
            <h3 className="text-xl font-black text-foreground px-2">Revenue <span className="text-primary">Breakdown</span></h3>
-           <div className="glass-card rounded-lg p-8 border-slate-100/50">
+           <div className="glass-card single-sided-gradient rounded-lg p-8 border-slate-100/50 shadow-xl shadow-primary/5">
               <div className="space-y-6">
                  <div>
                     <div className="flex justify-between items-center mb-2">

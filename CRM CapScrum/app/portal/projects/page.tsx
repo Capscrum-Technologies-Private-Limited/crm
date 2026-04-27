@@ -51,7 +51,7 @@ export default function PortalProjectsPage() {
             </h2>
             <p className="text-lg text-muted-foreground/60 font-medium mt-2">Comprehensive lifecycle analysis for all enterprise deployments.</p>
           </div>
-          <div className="px-6 py-2 rounded-full glass-card text-[10px] font-black text-primary uppercase tracking-[0.2em] shadow-xl">
+          <div className="px-6 py-2 rounded-full glass-card single-sided-gradient text-[10px] font-black text-primary uppercase tracking-[0.2em] shadow-xl shadow-primary/5">
             {projects.length} Secure Pulses
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function PortalProjectsPage() {
             <span className="text-[10px] font-black text-foreground opacity-20 uppercase tracking-[0.3em]">Querying Global Repository...</span>
           </div>
         ) : projects.length === 0 ? (
-          <div className="glass-card rounded-lg border-dashed py-32 flex flex-col items-center justify-center space-y-8">
+          <div className="glass-card single-sided-gradient rounded-lg border-dashed py-32 flex flex-col items-center justify-center space-y-8 shadow-2xl shadow-primary/5">
             <div className="w-24 h-24 rounded-lg bg-slate-50 flex items-center justify-center text-muted-foreground/10">
               <Briefcase size={44} />
             </div>
@@ -81,9 +81,8 @@ export default function PortalProjectsPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-card rounded-lg hover:border-primary/20 transition-all group overflow-hidden flex flex-col shadow-2xl relative"
+                className="glass-card single-sided-gradient rounded-lg hover:border-primary/20 transition-all group overflow-hidden flex flex-col shadow-2xl shadow-primary/5 relative"
               >
-                <div className="h-2 w-full premium-gradient opacity-20 group-hover:opacity-100 transition-opacity" />
                 <div className="p-10 space-y-10 flex-1 flex flex-col">
                   <div className="flex justify-between items-start">
                     <span className={cn(
@@ -115,7 +114,7 @@ export default function PortalProjectsPage() {
                         initial={{ width: 0 }}
                         animate={{ width: `${project.progress || 0}%` }}
                         transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
-                        className="h-full premium-gradient rounded-full shadow-[0_0_12px_rgba(59,130,246,0.3)]" 
+                        className="h-full premium-gradient rounded-full shadow-[0_0_12px_rgba(0,20,118,0.3)]" 
                       />
                     </div>
                   </div>

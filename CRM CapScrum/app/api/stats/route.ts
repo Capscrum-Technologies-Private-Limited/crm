@@ -65,10 +65,10 @@ export async function GET() {
     const overdueInvoices = invoiceStats.find(s => s.status === "OVERDUE");
     const sentInvoices = invoiceStats.find(s => s.status === "SENT");
 
-    const totalPaid = (paidInvoices?._sum?.total || 0) + (paidInvoices?._sum?.amount || 0);
-    const totalPending = (pendingInvoices?._sum?.total || 0) + (pendingInvoices?._sum?.amount || 0);
-    const totalOverdue = (overdueInvoices?._sum?.total || 0) + (overdueInvoices?._sum?.amount || 0);
-    const totalSent = (sentInvoices?._sum?.total || 0) + (sentInvoices?._sum?.amount || 0);
+    const totalPaid = Math.max(paidInvoices?._sum?.total || 0, paidInvoices?._sum?.amount || 0);
+    const totalPending = Math.max(pendingInvoices?._sum?.total || 0, pendingInvoices?._sum?.amount || 0);
+    const totalOverdue = Math.max(overdueInvoices?._sum?.total || 0, overdueInvoices?._sum?.amount || 0);
+    const totalSent = Math.max(sentInvoices?._sum?.total || 0, sentInvoices?._sum?.amount || 0);
 
     // Milestone payment tracking
     const milestoneReceived = milestonePaidTotal._sum.price || 0;

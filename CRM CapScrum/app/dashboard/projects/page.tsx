@@ -301,7 +301,7 @@ export default function ProjectsPage() {
             <span className="text-xs font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Syncing Global Portfolio...</span>
           </div>
         ) : projects.length === 0 ? (
-          <div className="glass-card rounded-lg border-dashed flex flex-col items-center justify-center py-24 space-y-6">
+          <div className="glass-card single-sided-gradient rounded-lg border-dashed flex flex-col items-center justify-center py-24 space-y-6 shadow-2xl shadow-primary/5">
             <div className="w-20 h-20 rounded-lg bg-slate-50 flex items-center justify-center text-muted-foreground/40">
               <Briefcase size={40} />
             </div>
@@ -319,7 +319,7 @@ export default function ProjectsPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-card rounded-lg hover:border-primary/30 transition-all group overflow-hidden flex flex-col shadow-2xl"
+                className="glass-card single-sided-gradient rounded-lg hover:border-primary/30 transition-all group overflow-hidden flex flex-col shadow-2xl shadow-primary/5"
               >
                 <div className="h-2 w-full premium-gradient opacity-30 group-hover:opacity-100 transition-opacity" />
                 <div className="p-8 space-y-8 flex-1 flex flex-col">

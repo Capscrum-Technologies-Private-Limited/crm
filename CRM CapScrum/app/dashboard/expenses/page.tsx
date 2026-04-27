@@ -240,7 +240,7 @@ export default function ExpensesPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-card rounded-lg p-6 relative overflow-hidden group">
+        <div className="glass-card single-sided-gradient rounded-lg p-6 relative overflow-hidden group shadow-xl shadow-primary/5">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-red-500/5 rounded-full blur-2xl" />
           <TrendingDown size={22} className="text-red-500 mb-3" />
           <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">Total Expenses</p>
@@ -251,7 +251,7 @@ export default function ExpensesPage() {
         {byCategory.slice(0, 3).map((cat, i) => {
           const cfg = getCategoryConfig(cat.category);
           return (
-            <div key={i} className="glass-card rounded-lg p-6 relative overflow-hidden">
+            <div key={i} className="glass-card single-sided-gradient rounded-lg p-6 relative overflow-hidden shadow-xl shadow-primary/5">
               <Tag size={22} className="text-primary/50 mb-3" />
               <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">{cfg.label}</p>
               <p className="text-2xl font-black text-foreground mt-1">
@@ -289,7 +289,7 @@ export default function ExpensesPage() {
       </div>
 
       {/* Table */}
-      <div className="glass-card rounded-lg overflow-hidden">
+      <div className="glass-card single-sided-gradient rounded-lg overflow-hidden shadow-2xl shadow-primary/5">
         <div className="p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <h3 className="text-xl font-bold text-foreground">Expense Log</h3>
           <div className="relative w-full md:w-80">

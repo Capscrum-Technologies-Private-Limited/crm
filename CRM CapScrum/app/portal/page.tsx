@@ -78,8 +78,7 @@ export default function PortalPage() {
 
       <div className="grid gap-10 md:grid-cols-3">
         {/* Progress Gauge Section */}
-        <div className="md:col-span-2 glass-card rounded-lg shadow-2xl overflow-hidden flex flex-col relative group pt-12 pb-8 px-8">
-          <div className="absolute top-0 left-0 w-full h-2 premium-gradient opacity-50" />
+        <div className="md:col-span-2 glass-card single-sided-gradient rounded-lg shadow-2xl shadow-primary/10 overflow-hidden flex flex-col relative group pt-12 pb-8 px-8">
           
           <div className="text-center mb-4">
             <h3 className="text-3xl font-black text-foreground uppercase tracking-tighter">
@@ -149,7 +148,7 @@ export default function PortalPage() {
 
         {/* Sidebar Actions/Info */}
         <div className="space-y-10">
-           <div className="glass-card rounded-lg p-8 flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
+           <div className="glass-card single-sided-gradient rounded-lg p-8 flex flex-col items-center text-center shadow-2xl shadow-primary/10 relative overflow-hidden group">
              <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
              <div className="w-20 h-20 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-primary mb-6 shadow-xl group-hover:scale-110 transition-transform">
                <MessageSquare size={32} />
@@ -193,9 +192,8 @@ export default function PortalPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="group flex items-center justify-between p-8 rounded-lg glass-card hover:border-primary/20 transition-all cursor-pointer shadow-xl relative overflow-hidden"
+                className="group flex items-center justify-between p-8 rounded-lg glass-card single-sided-gradient hover:border-primary/20 transition-all cursor-pointer shadow-xl shadow-primary/5 relative overflow-hidden"
               >
-                <div className="absolute top-0 left-0 h-full w-1 premium-gradient opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="flex items-center gap-8">
                   <div className="w-16 h-16 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-muted-foreground/30 group-hover:bg-primary/10 group-hover:text-primary transition-all shadow-inner">
                     <Briefcase size={28} />
@@ -232,7 +230,7 @@ export default function PortalPage() {
               </motion.div>
             ))
           ) : (
-             <div className="py-20 glass-card rounded-lg border-dashed text-center flex flex-col items-center gap-4">
+             <div className="py-20 glass-card single-sided-gradient rounded-lg border-dashed text-center flex flex-col items-center gap-4 shadow-xl shadow-primary/5">
                 <div className="w-16 h-16 rounded-lg bg-slate-50 flex items-center justify-center text-muted-foreground/10">
                   <Briefcase size={32} />
                 </div>

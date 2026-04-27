@@ -59,7 +59,7 @@ export default function LoginPage() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full max-w-lg relative z-10"
       >
-        <div className="glass-card rounded-lg shadow-2xl overflow-hidden p-12 md:p-16 flex flex-col relative group">
+        <div className="glass-card single-sided-gradient rounded-lg shadow-2xl shadow-primary/5 overflow-hidden p-12 md:p-16 flex flex-col relative group">
           <div className="absolute top-0 left-0 w-full h-2 premium-gradient opacity-60" />
           
           <div className="flex flex-col items-center mb-12">

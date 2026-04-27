@@ -87,56 +87,56 @@ export default function DashboardPage() {
       title: "Total Clients",
       value: stats.clientCount || 0,
       icon: Users,
-      color: "text-blue-600",
-      gradient: "from-blue-500/10 to-transparent",
+      color: "text-primary",
+      gradient: "from-primary/10 to-transparent",
       link: "/dashboard/clients",
     },
     {
       title: "Total Revenue",
       value: `₹${safeToLocaleString(stats.totalRevenue)}`,
       icon: DollarSign,
-      color: "text-emerald-600",
-      gradient: "from-emerald-500/10 to-transparent",
+      color: "text-primary",
+      gradient: "from-primary/10 to-transparent",
       link: "/dashboard/invoices",
     },
     {
       title: "Amount Received",
       value: `₹${safeToLocaleString(stats.amountReceived)}`,
       icon: CheckCircle2,
-      color: "text-green-600",
-      gradient: "from-green-500/10 to-transparent",
+      color: "text-primary",
+      gradient: "from-primary/10 to-transparent",
       link: "/dashboard/invoices",
     },
     {
       title: "Yet to Receive",
       value: `₹${safeToLocaleString(stats.yetToReceive)}`,
       icon: Clock,
-      color: "text-amber-600",
-      gradient: "from-amber-500/10 to-transparent",
+      color: "text-primary",
+      gradient: "from-primary/10 to-transparent",
       link: "/dashboard/invoices",
     },
     {
       title: "Active Projects",
       value: stats.activeProjects || 0,
       icon: Briefcase,
-      color: "text-purple-600",
-      gradient: "from-purple-500/10 to-transparent",
+      color: "text-primary",
+      gradient: "from-primary/10 to-transparent",
       link: "/dashboard/projects",
     },
     {
       title: "Invoices Paid",
       value: `₹${safeToLocaleString(stats.totalPaid)}`,
       icon: Receipt,
-      color: "text-teal-600",
-      gradient: "from-teal-500/10 to-transparent",
+      color: "text-primary",
+      gradient: "from-primary/10 to-transparent",
       link: "/dashboard/invoices",
     },
     {
       title: "Total Expenses",
       value: `₹${safeToLocaleString(stats.totalExpenses)}`,
       icon: Banknote,
-      color: "text-red-500",
-      gradient: "from-red-500/10 to-transparent",
+      color: "text-primary",
+      gradient: "from-primary/10 to-transparent",
       link: "/dashboard/expenses",
     },
   ];
@@ -213,10 +213,14 @@ export default function DashboardPage() {
         className="grid gap-5 md:grid-cols-2 lg:grid-cols-4"
       >
         {cards.map((card) => (
-          <Link key={card.title} href={card.link}>
+          <Link
+            key={card.title}
+            href={card.link}
+            className="group"
+          >
             <motion.div
               variants={item}
-              className="glass-card p-6 rounded-lg relative overflow-hidden group cursor-pointer hover:border-primary/20 transition-all"
+              className="glass-card single-sided-gradient rounded-lg p-8 relative overflow-hidden h-full shadow-2xl shadow-primary/5 hover:border-primary/20 transition-all"
             >
               <div
                 className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${card.gradient} -mr-16 -mt-16 rounded-full blur-3xl opacity-50`}
@@ -253,12 +257,12 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="glass-card rounded-lg p-8"
+          className="glass-card single-sided-gradient rounded-lg p-8 shadow-2xl shadow-primary/5"
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-200">
-                <Target size={22} className="text-indigo-600" />
+              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+                <Target size={22} className="text-primary" />
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">Payment Milestones</h3>
@@ -268,7 +272,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-black text-foreground">
+              <p className="text-2xl font-black text-primary">
                 {stats.milestonesPaid + stats.milestonesPending > 0
                   ? Math.round((stats.milestonesPaid / (stats.milestonesPaid + stats.milestonesPending)) * 100)
                   : 0}%
@@ -278,7 +282,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Progress Bar */}
-          <div className="relative h-4 bg-slate-100 rounded-full overflow-hidden mb-6">
+          <div className="relative h-4 bg-slate-100 rounded-full overflow-hidden mb-6 p-[2px] border border-slate-200">
             <motion.div
               initial={{ width: 0 }}
               animate={{
@@ -289,7 +293,7 @@ export default function DashboardPage() {
                 }%`,
               }}
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
-              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-emerald-500 via-green-500 to-teal-400"
+              className="absolute inset-y-0 left-0 rounded-full premium-gradient"
             />
           </div>
 
@@ -322,7 +326,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="lg:col-span-4 glass-card p-8 rounded-lg lg:h-[520px] flex flex-col"
+          className="lg:col-span-4 glass-card single-sided-gradient p-8 rounded-lg lg:h-[520px] flex flex-col shadow-2xl shadow-primary/5"
         >
           <div className="flex items-center justify-between mb-8 flex-shrink-0">
             <h3 className="text-xl font-bold text-foreground">
@@ -339,7 +343,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
-          className="lg:col-span-3 glass-card p-8 rounded-lg lg:h-[520px] flex flex-col"
+          className="lg:col-span-3 glass-card single-sided-gradient p-8 rounded-lg lg:h-[520px] flex flex-col shadow-2xl shadow-primary/5"
         >
           <h3 className="text-xl font-bold text-foreground mb-8 flex-shrink-0">
             Recent Activity
@@ -404,7 +408,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="glass-card rounded-lg p-6 flex flex-wrap items-center gap-8"
+          className="glass-card single-sided-gradient rounded-lg p-6 flex flex-wrap items-center gap-8 shadow-2xl shadow-primary/5"
         >
           {stats.totalPending > 0 && (
             <div className="flex items-center gap-3">

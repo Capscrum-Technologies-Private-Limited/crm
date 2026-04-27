@@ -31,7 +31,7 @@ export default function DashboardChat() {
       className="grid grid-cols-1 md:grid-cols-4 gap-8 h-[calc(100vh-140px)]"
     >
       {/* Sidebar: Conversations */}
-      <div className="col-span-1 glass-card rounded-lg flex flex-col overflow-hidden shadow-2xl">
+      <div className="col-span-1 glass-card single-sided-gradient rounded-lg flex flex-col overflow-hidden shadow-2xl shadow-primary/5">
         <div className="p-8 border-b border-slate-200 bg-slate-50/50">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-black text-foreground tracking-tight">Messages</h3>
@@ -107,14 +107,14 @@ export default function DashboardChat() {
       {/* Main Chat Area */}
       <div className="col-span-3">
         {selectedClient ? (
-          <div className="h-full glass-card rounded-lg overflow-hidden flex flex-col shadow-2xl relative">
+          <div className="h-full glass-card single-sided-gradient rounded-lg overflow-hidden flex flex-col shadow-2xl shadow-primary/5 relative">
             <ChatComponent 
               receiverId={selectedClient.userId} 
               receiverName={selectedClient.contactPerson} 
             />
           </div>
         ) : (
-          <div className="h-full glass-card rounded-lg flex items-center justify-center relative overflow-hidden group">
+          <div className="h-full glass-card single-sided-gradient rounded-lg flex items-center justify-center relative overflow-hidden group shadow-2xl shadow-primary/5">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
             <div className="text-center space-y-8 max-w-sm px-8 relative z-10">
               <div className="w-28 h-28 bg-slate-50 border border-slate-200 rounded-lg mx-auto flex items-center justify-center shadow-2xl">

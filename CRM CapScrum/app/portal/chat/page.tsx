@@ -42,7 +42,7 @@ export default function PortalChat() {
         </p>
       </div>
 
-      <div className="flex-1 min-h-0 glass-card rounded-lg overflow-hidden shadow-2xl relative">
+      <div className="flex-1 min-h-0 glass-card single-sided-gradient rounded-lg overflow-hidden shadow-2xl shadow-primary/5 relative">
         {selectedMember ? (
           <ChatComponent 
             receiverId={selectedMember.id} 

@@ -248,7 +248,7 @@ export default function TemplatesPage() {
             <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto opacity-40" />
           </div>
         ) : templates.length === 0 ? (
-          <div className="col-span-full glass-card rounded-lg border-dashed py-20 text-center">
+          <div className="col-span-full glass-card single-sided-gradient rounded-lg border-dashed py-20 text-center shadow-xl shadow-primary/5">
             <FileText size={40} className="mx-auto text-muted-foreground/20 mb-4" />
             <p className="text-lg font-bold text-foreground/40">No templates yet</p>
             <p className="text-sm text-muted-foreground/40 mt-1">Create your first invoice template to get started.</p>
@@ -260,7 +260,7 @@ export default function TemplatesPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05 }}
-              className="glass-card rounded-lg overflow-hidden group hover:border-primary/20 transition-all"
+              className="glass-card single-sided-gradient rounded-lg overflow-hidden group hover:border-primary/20 transition-all shadow-xl shadow-primary/5"
             >
               {/* Color preview bar */}
               <div className="h-3 w-full" style={{ backgroundColor: t.colorPrimary }} />

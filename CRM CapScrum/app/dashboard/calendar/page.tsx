@@ -294,7 +294,7 @@ export default function CalendarPage() {
       {/* Calendar + Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Calendar Grid */}
-        <div className="lg:col-span-3 glass-card rounded-lg overflow-hidden">
+        <div className="lg:col-span-3 glass-card single-sided-gradient rounded-lg overflow-hidden shadow-2xl shadow-primary/5">
           {/* Month Navigation */}
           <div className="p-6 border-b border-slate-200 flex items-center justify-between">
             <button onClick={() => goToMonth(-1)} className="p-3 rounded-md hover:bg-slate-100 text-muted-foreground hover:text-foreground transition-all">
@@ -383,7 +383,7 @@ export default function CalendarPage() {
         {/* Sidebar: Selected Day / Upcoming */}
         <div className="space-y-6">
           {/* Selected Day Detail */}
-          <div className="glass-card rounded-lg p-6">
+          <div className="glass-card single-sided-gradient rounded-lg p-6 shadow-xl shadow-primary/5">
             <div className="flex items-center justify-between mb-6">
               <h4 className="text-lg font-black text-foreground">
                 {selectedDay
@@ -471,7 +471,7 @@ export default function CalendarPage() {
           </div>
 
           {/* Legend */}
-          <div className="glass-card rounded-lg p-6">
+          <div className="glass-card single-sided-gradient rounded-lg p-6 shadow-xl shadow-primary/5">
             <h4 className="text-sm font-black text-foreground mb-4 uppercase tracking-wider">Legend</h4>
             <div className="space-y-3">
               {Object.entries(TYPE_CONFIG).map(([key, config]) => {

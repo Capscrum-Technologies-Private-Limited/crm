@@ -323,7 +323,7 @@ export default function ClientsPage() {
         </Dialog>
       </div>
 
-      <div className="glass-card rounded-lg overflow-hidden">
+      <div className="glass-card single-sided-gradient rounded-lg overflow-hidden shadow-2xl shadow-primary/5">
         <div className="p-8 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <h3 className="text-xl font-bold text-foreground">Active Portfolio</h3>
           <div className="relative w-full md:w-96">

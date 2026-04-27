@@ -320,7 +320,7 @@ export default function TeamPage() {
 
       {/* Team Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-card rounded-lg p-6">
+        <div className="glass-card single-sided-gradient rounded-lg p-6 shadow-xl shadow-primary/5">
           <div className="flex items-center gap-4">
             <div className="p-4 rounded-lg bg-blue-50 border border-blue-200 text-blue-600">
               <Users size={24} />
@@ -331,7 +331,7 @@ export default function TeamPage() {
             </div>
           </div>
         </div>
-        <div className="glass-card rounded-lg p-6">
+        <div className="glass-card single-sided-gradient rounded-lg p-6 shadow-xl shadow-primary/5">
           <div className="flex items-center gap-4">
             <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-600">
               <Shield size={24} />
@@ -342,7 +342,7 @@ export default function TeamPage() {
             </div>
           </div>
         </div>
-        <div className="glass-card rounded-lg p-6">
+        <div className="glass-card single-sided-gradient rounded-lg p-6 shadow-xl shadow-primary/5">
           <div className="flex items-center gap-4">
             <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600">
               <Users size={24} />
@@ -356,7 +356,7 @@ export default function TeamPage() {
       </div>
 
       {/* Team Table */}
-      <div className="glass-card rounded-lg overflow-hidden">
+      <div className="glass-card single-sided-gradient rounded-lg overflow-hidden shadow-2xl shadow-primary/5">
         <div className="p-8 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <h3 className="text-xl font-bold text-foreground">Team Directory</h3>
           <div className="relative w-full md:w-96">

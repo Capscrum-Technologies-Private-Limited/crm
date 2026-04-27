@@ -77,7 +77,7 @@ export default function PortalRoadmapPage() {
 
   if (!clientData) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 glass-card rounded-2xl border-dashed">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 glass-card single-sided-gradient rounded-2xl border-dashed shadow-xl shadow-primary/5">
         <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center mb-6">
           <GitGraph size={40} className="text-muted-foreground/20" />
         </div>
@@ -105,7 +105,7 @@ export default function PortalRoadmapPage() {
             Real-time visual path for <span className="text-foreground font-black uppercase tracking-tight">{clientData.companyName}</span>
           </p>
         </div>
-        <div className="text-right glass-card px-8 py-4 rounded-2xl shadow-xl">
+        <div className="text-right glass-card single-sided-gradient px-8 py-4 rounded-2xl shadow-xl shadow-primary/5">
           <p className="text-4xl font-black text-primary leading-none tracking-tighter">
             {totalProgress}%
           </p>
@@ -118,7 +118,7 @@ export default function PortalRoadmapPage() {
       {/* Main Roadmap Area */}
       <div className="space-y-12">
         {clientData.pipelineStages.length === 0 ? (
-          <div className="text-center py-20 glass-card rounded-2xl border-dashed">
+          <div className="text-center py-20 glass-card single-sided-gradient rounded-2xl border-dashed shadow-xl shadow-primary/5">
              <p className="text-sm font-bold text-muted-foreground/30 uppercase tracking-[0.2em]">
                Operational stages pending initialization
              </p>
@@ -180,14 +180,11 @@ export default function PortalRoadmapPage() {
                                   stage.isCompleted 
                                     ? "bg-white border-emerald-100 shadow-sm" 
                                     : isFirstPending
-                                      ? "bg-white border-primary/30 shadow-2xl shadow-primary/5 ring-1 ring-primary/10"
+                                      ? "bg-white border-primary/30 shadow-2xl shadow-primary/10 ring-1 ring-primary/10 single-sided-gradient"
                                       : "bg-white border-slate-100 shadow-sm"
                                 )}
                               >
-                                {/* Active Accent */}
-                                {isFirstPending && (
-                                  <div className="absolute top-0 left-0 w-1.5 h-full bg-primary" />
-                                )}
+                                {/* Active Accent removed - handled by single-sided-gradient */}
 
                                 <div className="flex items-start justify-between gap-4 mb-4">
                                   <div className="flex items-center gap-4 min-w-0">

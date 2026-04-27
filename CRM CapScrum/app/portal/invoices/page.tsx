@@ -140,11 +140,11 @@ export default function PortalInvoicesPage() {
         </h3>
 
         {loading ? (
-          <div className="glass-card rounded-lg p-12 flex justify-center">
+          <div className="glass-card single-sided-gradient rounded-lg p-12 flex justify-center shadow-2xl shadow-primary/5">
             <Loader2 className="animate-spin text-primary w-8 h-8" />
           </div>
         ) : unpaidInvoices.length === 0 ? (
-          <div className="glass-card rounded-lg p-12 text-center flex flex-col items-center justify-center">
+          <div className="glass-card single-sided-gradient rounded-lg p-12 text-center flex flex-col items-center justify-center shadow-2xl shadow-primary/5">
             <CheckCircle2 size={48} className="text-emerald-500 mb-4 opacity-50" />
             <p className="font-bold text-foreground">You're all caught up!</p>
             <p className="text-sm text-muted-foreground mt-1">
@@ -156,7 +156,7 @@ export default function PortalInvoicesPage() {
             {unpaidInvoices.map((inv) => (
               <div
                 key={inv.id}
-                className="glass-card rounded-lg p-6 md:p-8 flex flex-col border-primary/20 bg-primary/5"
+                className="glass-card single-sided-gradient rounded-lg p-6 md:p-8 flex flex-col border-primary/20 bg-primary/5 shadow-2xl shadow-primary/10"
               >
                 <div className="flex justify-between items-start mb-4">
                   {getStatusBadge(inv.status)}
@@ -242,7 +242,7 @@ export default function PortalInvoicesPage() {
           Payment History
         </h3>
 
-        <div className="glass-card rounded-lg overflow-hidden flex flex-col w-full">
+        <div className="glass-card single-sided-gradient rounded-lg overflow-hidden flex flex-col w-full shadow-2xl shadow-primary/5">
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left min-w-[700px]">
               <thead>

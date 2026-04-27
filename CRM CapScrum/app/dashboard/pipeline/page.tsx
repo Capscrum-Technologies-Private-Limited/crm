@@ -441,7 +441,7 @@ export default function PipelinePage() {
                 layout
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card rounded-lg overflow-hidden border-slate-100/10 group"
+                className="glass-card single-sided-gradient rounded-lg overflow-hidden border-slate-100/10 group shadow-2xl shadow-primary/5"
               >
                 {/* Client Header */}
                 <div className="p-5 border-b border-slate-100/50 bg-slate-50/30">
