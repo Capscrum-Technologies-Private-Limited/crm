@@ -95,11 +95,11 @@ export async function POST(req: Request) {
       };
 
       const createdStages = await prisma.$transaction(async (tx) => {
-        await tx.pipelineStage.deleteMany({
+        await tx.clientPipelineStage.deleteMany({
           where: contextFilter
         });
         
-        return tx.pipelineStage.createMany({
+        return tx.clientPipelineStage.createMany({
           data: stages.map((s: any) => ({
             clientId,
             projectId: projectId || null,
@@ -115,7 +115,7 @@ export async function POST(req: Request) {
 
     if (data.isReorder && Array.isArray(stages)) {
       const updates = stages.map((s: any) => 
-        prisma.pipelineStage.update({   
+        prisma.clientPipelineStage.update({
           where: { id: s.id as string },
           data: { order: s.order as number }
         })
@@ -167,7 +167,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Finalized stages cannot be modified" }, { status: 403 });
     }
 
-    const stage = await prisma.pipelineStage.update({
+    const stage = await prisma.clientPipelineStage.update({
       where: { id },
       data: {
         ...(name && { name }),
@@ -204,7 +204,7 @@ export async function DELETE(req: Request) {
 
   try {
     // 1. Get the stage to be deleted to know its weight, clientId, and projectId
-    const stageToDelete = await prisma.pipelineStage.findUnique({
+    const stageToDelete = await prisma.clientPipelineStage.findUnique({
       where: { id },
       select: { percentage: true, clientId: true, projectId: true }
     });
@@ -216,7 +216,7 @@ export async function DELETE(req: Request) {
     const { percentage: deletedWeight, clientId, projectId } = stageToDelete;
 
     // 2. Get all other stages in the same context (same client and same project/general)
-    const remainingStages = await prisma.pipelineStage.findMany({
+    const remainingStages = await prisma.clientPipelineStage.findMany({
       where: { 
         clientId,
         projectId: projectId || null,
@@ -237,7 +237,7 @@ export async function DELETE(req: Request) {
         
         updates = remainingStages.map((s: any, index: number) => {
           const added = index === remainingStages.length - 1 ? extraPerStage + remainder : extraPerStage;
-          return prisma.pipelineStage.update({
+          return prisma.clientPipelineStage.update({
             where: { id: s.id },
             data: { percentage: s.percentage + added }
           });
@@ -255,7 +255,7 @@ export async function DELETE(req: Request) {
             distributedWeight += added;
           }
           
-          return prisma.pipelineStage.update({
+          return prisma.clientPipelineStage.update({
             where: { id: s.id },
             data: { percentage: s.percentage + added }
           });
@@ -265,11 +265,11 @@ export async function DELETE(req: Request) {
       // 3. Execute updates and deletion in a transaction
       await prisma.$transaction([
         ...updates,
-        prisma.pipelineStage.delete({ where: { id } })
+        prisma.clientPipelineStage.delete({ where: { id } })
       ]);
     } else {
       // Just delete if no other stages or no weight to distribute
-      await prisma.pipelineStage.delete({ where: { id } });
+      await prisma.clientPipelineStage.delete({ where: { id } });
     }
 
     return NextResponse.json({ success: true });
